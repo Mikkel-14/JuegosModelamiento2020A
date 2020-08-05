@@ -8,9 +8,5 @@ El repositorio tendrá (provisionalmente) las siguientes ramas:
  Adicionalmente, existirá una rama por cada grupo (Rama A, B, ..., E), en la cual cada integrante podrá hacer commits a su juego. Los pull request de estas ramas sólo se haran a la rama secundaria una vez se encuentren revisados los cambios para evitar daños sobre todo el proyecto.
  Se contaran con los siguientes jueegos:
  
- A.
- B.
- C.
- D.
- E. Snake
+
  
