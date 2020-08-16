@@ -20,6 +20,7 @@ El repositorio tendrá (provisionalmente) las siguientes ramas:
 Puede descargar este repositorio con el siguiente comando:
 
 `git clone https://github.com/Mikkel-14/JuegosModelamiento2020A`
+
 Finalmente ejecute app.py
 
 ## Colaboradores
