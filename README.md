@@ -6,18 +6,20 @@ El repositorio tendrá (provisionalmente) las siguientes ramas:
  2. Rama secundaria: Contiene la ultima versión del proyecto, con todos los cambios añadidos por los diferentes compañeros de curso. 
  
  Adicionalmente, existirá una rama por cada grupo (Rama A, B, ..., E), en la cual cada integrante podrá hacer commits a su juego. Los pull request de estas ramas sólo se haran a la rama secundaria una vez se encuentren revisados los cambios para evitar daños sobre todo el proyecto.
- Se contaran con los siguientes jueegos:
+ Se contaran con los siguientes juegos:
 
 ## Pre requisitos
 
 - Tener instalado python en su versión 3.6.X o hasta su versión más actual.
 - Tener instalada la librería pygame en su versión 1.9.X
+
   `pip3 install pygame`
 
 ## Instalación
 
 Puede descargar este repositorio con el siguiente comando:
-`git clone url`
+
+`git clone https://github.com/Mikkel-14/JuegosModelamiento2020A`
 Finalmente ejecute app.py
 
 ## Colaboradores
@@ -54,7 +56,7 @@ Finalmente ejecute app.py
 **Grupo E:**
 
 - Carolina Mendoza
-- Edison Cabrera
+- Edison Quimbiamba
 - César León
 - Alex Aguacondo
 
