@@ -7,6 +7,60 @@ El repositorio tendrá (provisionalmente) las siguientes ramas:
  
  Adicionalmente, existirá una rama por cada grupo (Rama A, B, ..., E), en la cual cada integrante podrá hacer commits a su juego. Los pull request de estas ramas sólo se haran a la rama secundaria una vez se encuentren revisados los cambios para evitar daños sobre todo el proyecto.
  Se contaran con los siguientes jueegos:
- 
+
+## Pre requisitos
+
+- Tener instalado python en su versión 3.6.X o hasta su versión más actual.
+- Tener instalada la librería pygame en su versión 1.9.X
+  `pip3 install pygame`
+
+## Instalación
+
+Puede descargar este repositorio con el siguiente comando:
+`git clone url`
+Finalmente ejecute app.py
+
+## Colaboradores
+
+**Grupo A:**
+
+- Alejandro Llanganate
+- Anderson Cárdenas
+- Henrry Cordovillo
+- David Moreno
+
+**Grupo B:**
+
+- Mahatma Quijano
+- Diana López
+- Nombre
+- Nombre
+
+**Grupo C:**
+
+- Steven Rivera
+- Rodman ...
+- Andrés Palma
+- Nombre
+
+**Grupo D:**
+
+- José Muñoz
+- Santiago Villegas
+- Ricardo Paredes
+- Christian Amaguaña
+- William Suntaxi
+
+**Grupo E:**
+
+- Carolina Mendoza
+- Edison Cabrera
+- César León
+- Alex Aguacondo
+
+## Agradecimientos
+
+A la Ing. Pamela Flores, PhD por realizar la revisión sobre el desarrollo de este proyecto.
+
 
  
