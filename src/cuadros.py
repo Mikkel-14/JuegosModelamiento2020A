@@ -4,12 +4,14 @@ from abc import ABC, abstractmethod
 pygame.init()
 
 class Cuadro(ABC):
-	    def __init__(self, posicion):
-	        self.posicion = posicion
-	        super().__init__()
+	def __init__(self, posicion):
+	    self.posicion = posicion
+	    super().__init__()
 
+	@property
+    def posicion(self):
+        return self.__posicion
 
-		
-		@property
-		def dibujar(self):
-			pass
+	@abstractmethod
+	def dibujar(self):
+		pass
