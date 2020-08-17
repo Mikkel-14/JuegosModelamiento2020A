@@ -37,7 +37,7 @@ Finalmente ejecute app.py
 - Mahatma Quijano
 - Diana López
 - Alexander Vargas
-- Nombre
+- Alisson Sanmartín
 
 **Grupo C:**
 
