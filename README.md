@@ -60,6 +60,7 @@ Finalmente ejecute app.py
 - Edison Quimbiamba
 - César León
 - Alex Aguacondo
+- Santiago Collaguazo
 
 ## Agradecimientos
 
