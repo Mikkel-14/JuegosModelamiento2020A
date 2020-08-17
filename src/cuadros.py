@@ -8,6 +8,10 @@ class Cuadro(ABC):
 	    self.posicion = posicion
 	    super().__init__()
 
+	@abstractmethod
+	def mover(self):
+		pass
+
 	@property
     def posicion(self):
         return self.__posicion
