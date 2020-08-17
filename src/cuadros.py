@@ -7,3 +7,9 @@ class Cuadro(ABC):
 	    def __init__(self, posicion):
 	        self.posicion = posicion
 	        super().__init__()
+
+
+		
+		@property
+		def dibujar(self):
+			pass
