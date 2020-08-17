@@ -36,7 +36,7 @@ Finalmente ejecute app.py
 
 - Mahatma Quijano
 - Diana López
-- Nombre
+- Alexander Vargas
 - Nombre
 
 **Grupo C:**
