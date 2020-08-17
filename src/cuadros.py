@@ -15,3 +15,9 @@ class Cuadro(ABC):
 	@abstractmethod
 	def dibujar(self):
 		pass
+
+class Fondo(Cuadro):
+	    def __init__(self, imagen, posicion):
+	        self._Cuadro__posicion = posicion
+	        self.imagen = pygame.image.load(imagen)
+			
