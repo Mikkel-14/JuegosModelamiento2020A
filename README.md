@@ -42,7 +42,7 @@ Finalmente ejecute app.py
 **Grupo C:**
 
 - Steven Rivera
-- Rodman ...
+- Rodman Iñiguez
 - Andrés Palma
 - Nombre
 
