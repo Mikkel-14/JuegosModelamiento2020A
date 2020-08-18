@@ -34,6 +34,18 @@ class Personaje(Cuadro):
     def dibujar(self, ventana):
         ventana.blit(self.imagen, self.posicion.getPosicion())
 
+    def mover(self, dr, sl):
+        keys = Listener.detectar()
+        x, y = self.posicion.getPosicion()
+        if keys[pygame.K_UP] and sl.verificar((x,y-dr)):
+            self.posicion.y -= dr
+        if keys[pygame.K_DOWN] and sl.verificar((x,y+dr)):
+            self.posicion.y += dr
+        if keys[pygame.K_LEFT] and sl.verificar((x-dr,y)):
+            self.posicion.x -= dr
+        if keys[pygame.K_RIGHT] and sl.verificar((x+dr, y)):
+            self.posicion.x += dr
+
 class MapaMuseo(Cuadro):
     def init(self):
         self._Cuadro__posicion = Posicion(0,0)
@@ -42,7 +54,7 @@ class MapaMuseo(Cuadro):
         self.dictCuadros['estaciones'] = list()
         self.dictCuadros['personaje'] = None
         self.dictCuadros['fondo'] = None
-		
+
 	def agregarCuadros(self, cuadro):
 		if isinstance(cuadro, Camino):
              self.dictCuadros['camino'].append(cuadro)
