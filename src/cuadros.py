@@ -31,6 +31,12 @@ class Fondo(Cuadro):
 	    def mover(self):
 	        pass
 
+class Camino(Cuadro):
+	    def __init__(self, imagen, posicion):
+	        self._Cuadro__posicion = posicion
+	        self.imagen = pygame.image.load(imagen)
+
+
 class Personaje(Cuadro):
     def _init_(self, imagen, posicion):
         self.Cuadro_posicion = posicion
