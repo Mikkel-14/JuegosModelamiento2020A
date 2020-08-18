@@ -44,3 +44,24 @@ class MapaMuseo(Cuadro):
              self.dictCuadros['personaje'] = cuadro
         elif isinstance(cuadro, Fondo):
              self.dictCuadros['fondo'] = cuadro
+
+    def accederLista(self):
+        return self.dictCuadros
+
+    def dibujar(self, ventana):
+        self.dictCuadros['fondo'].dibujar(ventana)
+        for camino in self.dictCuadros['camino']:
+            camino.dibujar(ventana)
+        for estacion in self.dictCuadros['estaciones']:
+            estacion.dibujar(ventana)
+        self.dictCuadros['personaje'].dibujar(ventana)
+        pygame.display.update()
+
+
+    def mover(self, solapamiento):
+        self.dictCuadros['fondo'].mover()
+        for camino in self.dictCuadros['camino']:
+            camino.mover()
+        for estacion in self.dictCuadros['estaciones']:
+            estacion.mover()
+        self.dictCuadros['personaje'].mover(34, solapamiento)
