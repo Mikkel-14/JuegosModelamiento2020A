@@ -26,6 +26,14 @@ class Fondo(Cuadro):
 	        self._Cuadro__posicion = posicion
 	        self.imagen = pygame.image.load(imagen)
 
+class Personaje(Cuadro):
+    def _init_(self, imagen, posicion):
+        self.Cuadro_posicion = posicion
+        self.imagen = pygame.image.load(imagen)
+
+    def dibujar(self, ventana):
+        ventana.blit(self.imagen, self.posicion.getPosicion())
+
 class MapaMuseo(Cuadro):
     def init(self):
         self._Cuadro__posicion = Posicion(0,0)
