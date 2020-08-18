@@ -25,6 +25,13 @@ class Fondo(Cuadro):
 	    def __init__(self, imagen, posicion):
 	        self._Cuadro__posicion = posicion
 	        self.imagen = pygame.image.load(imagen)
+		def dibujar(self, ventana):
+	        ventana.blit(self.imagen, 
+self.posicion.getPosicion())
+
+	    def mover(self):
+	        pass
+
 
 class Personaje(Cuadro):
     def _init_(self, imagen, posicion):
