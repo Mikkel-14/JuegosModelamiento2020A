@@ -34,3 +34,13 @@ class MapaMuseo(Cuadro):
         self.dictCuadros['estaciones'] = list()
         self.dictCuadros['personaje'] = None
         self.dictCuadros['fondo'] = None
+
+	def agregarCuadros(self, cuadro):
+        if isinstance(cuadro, Camino):
+             self.dictCuadros['camino'].append(cuadro)
+        elif isinstance(cuadro, Estacion):
+             self.dictCuadros['estaciones'].append(cuadro)
+        elif isinstance(cuadro, Personaje):
+             self.dictCuadros['personaje'] = cuadro
+        elif isinstance(cuadro, Fondo):
+             self.dictCuadros['fondo'] = cuadro
