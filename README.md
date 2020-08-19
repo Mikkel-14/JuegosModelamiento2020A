@@ -44,7 +44,7 @@ Finalmente ejecute app.py
 - Steven Rivera
 - Rodman Iñiguez
 - Andrés Palma
-- Nombre
+- Brandon Toapanta
 
 **Grupo D:**
 
