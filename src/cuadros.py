@@ -46,24 +46,29 @@ class Fondo(Cuadro):
 
 
 class Personaje(Cuadro):
-    def __init__(self, imagen, posicion):
-        self._Cuadro__posicion = posicion
+    def _init_(self, imagen, posicion):
+        self.Cuadro_posicion = posicion
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
-        ventana.blit(self.imagen, self.posicion.getPosicion())
+        ventana.blit(pygame.transform.scale(self.imagen, (s.dim_Cuadro, s.dim_Cuadro)), self.posicion.getPosicion())
 
     def mover(self, dr, sl):
         keys = Listener.detectar()
         x, y = self.posicion.getPosicion()
-        if keys[pygame.K_UP] and sl.verificar((x, y-dr)):
+        if keys[pygame.K_UP] and sl.verificar((x, y - dr)):
             self.posicion.y -= dr
-        if keys[pygame.K_DOWN] and sl.verificar((x, y+dr)):
+            pygame.time.delay(150)
+        if keys[pygame.K_DOWN] and sl.verificar((x, y + dr)):
             self.posicion.y += dr
-        if keys[pygame.K_LEFT] and sl.verificar((x-dr, y)):
+            pygame.time.delay(150)
+        if keys[pygame.K_LEFT] and sl.verificar((x - dr, y)):
             self.posicion.x -= dr
-        if keys[pygame.K_RIGHT] and sl.verificar((x+dr, y)):
+            pygame.time.delay(150)
+        if keys[pygame.K_RIGHT] and sl.verificar((x + dr, y)):
             self.posicion.x += dr
+            pygame.time.delay(150)
+
 
 
 class MapaMuseo(Cuadro):
