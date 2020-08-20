@@ -32,12 +32,14 @@ class Cuadro(ABC):
 
 
 class Fondo(Cuadro):
-    def __init__(self, imagen, posicion):
-        self._Cuadro__posicion = posicion
+    def _init_(self, imagen, posicion):
+        self.Cuadro_posicion = posicion
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
-        ventana.blit(self.imagen, self.posicion.getPosicion())
+        ancho = s.columnas * s.dim_Cuadro
+        alto = s.filas * s.dim_Cuadro
+        ventana.blit(pygame.transform.scale(self.imagen, (ancho, alto)), self.posicion.getPosicion())
 
     def mover(self):
         pass
