@@ -73,42 +73,53 @@ class Personaje(Cuadro):
 
 class MapaMuseo(Cuadro):
     def __init__(self):
-        self._Cuadro__posicion = Posicion(0, 0)
+        self._Cuadro__posicion = Posicion(0,0)
         self.dictCuadros = dict()
         self.dictCuadros['camino'] = list()
-        #self.dictCuadros['estaciones'] = list()
+        self.dictCuadros['estaciones'] = list()
         self.dictCuadros['personaje'] = None
         self.dictCuadros['fondo'] = None
+        self.dictCuadros['mensaje'] = list()
+        self.dictCuadros['marcador'] = None
+
 
     def agregarCuadros(self, cuadro):
         if isinstance(cuadro, Camino):
-            self.dictCuadros['camino'].append(cuadro)
-        # elif isinstance(cuadro, Estacion):
-        #     self.dictCuadros['estaciones'].append(cuadro)
+             self.dictCuadros['camino'].append(cuadro)
+        elif isinstance(cuadro, Estacion):
+             self.dictCuadros['estaciones'].append(cuadro)
         elif isinstance(cuadro, Personaje):
-            self.dictCuadros['personaje'] = cuadro
+             self.dictCuadros['personaje'] = cuadro
         elif isinstance(cuadro, Fondo):
-            self.dictCuadros['fondo'] = cuadro
+             self.dictCuadros['fondo'] = cuadro
+        elif isinstance(cuadro, Mensaje):
+            self.dictCuadros['mensaje'].append(cuadro)
+        elif isinstance(cuadro, Marcador):
+            self.dictCuadros['marcador'] = cuadro
 
     def accederLista(self):
         return self.dictCuadros
 
-    def dibujar(self, ventana):
+    def dibujar(self,ventana):
         self.dictCuadros['fondo'].dibujar(ventana)
         for camino in self.dictCuadros['camino']:
             camino.dibujar(ventana)
-        # for estacion in self.dictCuadros['estaciones']:
-        #    estacion.dibujar(ventana)
+        for estacion in self.dictCuadros['estaciones']:
+            estacion.dibujar(ventana)
         self.dictCuadros['personaje'].dibujar(ventana)
+        self.dictCuadros['marcador'].dibujar(ventana)
+        for mensaje in self.dictCuadros['mensaje']:
+            mensaje.dibujar(ventana)
         pygame.display.update()
 
     def mover(self, solapamiento):
         self.dictCuadros['fondo'].mover()
         for camino in self.dictCuadros['camino']:
             camino.mover()
-        # for estacion in self.dictCuadros['estaciones']:
-        #    estacion.mover()
-        self.dictCuadros['personaje'].mover(34, solapamiento)
+        for estacion in self.dictCuadros['estaciones']:
+            estacion.mover()
+        self.dictCuadros['personaje'].mover(s.dim_Cuadro, solapamiento)
+
 
 
 class Camino(Cuadro):
