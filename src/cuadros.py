@@ -32,7 +32,7 @@ class Cuadro(ABC):
 
 
 class Fondo(Cuadro):
-    def _init_(self, imagen, posicion):
+    def __init__(self, imagen, posicion):
         self._Cuadro_posicion = posicion
         self.imagen = pygame.image.load(imagen)
 
@@ -46,7 +46,7 @@ class Fondo(Cuadro):
 
 
 class Personaje(Cuadro):
-    def _init_(self, imagen, posicion):
+    def __init__(self, imagen, posicion):
         self._Cuadro_posicion = posicion
         self.imagen = pygame.image.load(imagen)
 
