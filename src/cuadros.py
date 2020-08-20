@@ -194,3 +194,19 @@ class Mensaje(Cuadro):
                 juego.iniciarJuego()
             elif keys[pygame.K_ESCAPE]:
                 self.aparecer = False
+
+class Marcador(Cuadro):
+
+    def __init__(self, imagen, posicion, puntaje):
+        self._Cuadro__posicion = posicion
+        self.imagen = pygame.image.load(imagen)
+        self.puntaje = puntaje
+
+    def dibujar(self, ventana):
+        ventana.blit(self.imagen, self.posicion.getPosicion())
+        fuente = pygame.font.SysFont('Arial', 25)
+        texto_puntaje = fuente.render(f'Puntaje: {self.puntaje.getAcumulador()}', 0, (255, 255, 255))
+        ventana.blit(texto_puntaje, (self.posicion.getPosicion()[0] + 65, self.posicion.getPosicion()[1] + 10))
+
+    def mover(self):
+        pass
