@@ -55,18 +55,41 @@ while True:
             posicion = Posicion(x, y)
             mapa.agregarCuadros(Estacion(ALFOMBRA_PATH, posicion, coords[2]))
 
+    with open(MENSAJE_PATH) as f:
+        for line in f:
+            textos = line.strip().split(',')
+            mapa.agregarCuadros(Mensaje(obtenerPathAbsoluto(textos[0]),textos[1]))
 
-
-
-mapa.agregarCuadros(Personaje(PERSONAJE_PATH, Posicion(0, 6*34)))
-solapamiento = Solapamiento(mapa)
-mapa.dibujar(ven)
-
-while True:
-    reloj.tick(60)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-
-    mapa.mover(solapamiento)
+    ppNiña = open(obtenerPathAbsoluto("assets/ppNiña.txt"),"r")
+    listNiña = ppNiña.readline().split(",")
+    ppNiña.close()
+    mapa.agregarCuadros(Personaje(PERSONAJE_PATH, Posicion(int(listNiña[0]),int(listNiña[1]))))
+    solapamiento = Solapamiento(mapa)
     mapa.dibujar(ven)
+
+    while True:
+
+        reloj.tick(s.FPS)
+
+        try:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+
+        except Exception:
+            break
+        lstMsj = mapa.accederLista()['mensaje']
+        msj = lstMsj[0]
+        for m in lstMsj:
+            if m.getNombre() == 'inicio' and INSTRUCCIONES:
+                m.permitirDibujo(True)
+                INSTRUCCIONES = False
+                break
+            if m.getAparecer():
+                msj = m
+
+        msj.esperar()
+        if not msj.getAparecer():
+            mapa.mover(solapamiento)
+            mapa.dibujar(ven)
