@@ -120,7 +120,23 @@ class MapaMuseo(Cuadro):
             estacion.mover()
         self.dictCuadros['personaje'].mover(s.dim_Cuadro, solapamiento)
 
+class Estacion(Cuadro):
+    def __init__(self, imagen, posicion, nombreEstacion):
+        self._Cuadro__posicion = posicion
+        self.imagen = pygame.image.load(imagen)
+        self.nombre = nombreEstacion
 
+    def dibujar(self, ventana):
+        ventana.blit(self.imagen, self.posicion.getPosicion())
+
+    def getNombre(self):
+        return self.nombre
+
+    def mover(self):
+        pass
+
+    def obtenerPosicion(self):
+        return self.posicion.getPosicion()
 
 class Camino(Cuadro):
     def __init__(self, imagen, posicion):
