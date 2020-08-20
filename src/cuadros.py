@@ -1,7 +1,14 @@
 import pygame
+import os
+import settings as s
 from abc import ABC, abstractmethod
 from posicion import *
 from listener import *
+from virus.virus import *
+from laberinto.laberinto import *
+from ruta.ruta import *
+from snake.snake import *
+from puzzle.puzzle import *
 
 pygame.init()
 
