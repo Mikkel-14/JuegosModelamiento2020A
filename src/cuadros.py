@@ -33,7 +33,7 @@ class Cuadro(ABC):
 
 class Fondo(Cuadro):
     def __init__(self, imagen, posicion):
-        self._Cuadro_posicion = posicion
+        self._Cuadro__posicion = posicion
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
@@ -47,7 +47,7 @@ class Fondo(Cuadro):
 
 class Personaje(Cuadro):
     def __init__(self, imagen, posicion):
-        self._Cuadro_posicion = posicion
+        self._Cuadro__posicion = posicion
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
