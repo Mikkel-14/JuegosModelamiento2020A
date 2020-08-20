@@ -125,3 +125,45 @@ class Camino(Cuadro):
     def obtenerPosicion(self):
         return self.posicion.getPosicion()
 
+class Mensaje(Cuadro):
+    def __init__(self, imagen, nombre):
+        self._Cuadro__posicion = Posicion(175,120)
+        self.imagen = pygame.image.load(imagen)
+        self.nombre = nombre
+        self.aparecer = False
+
+    def dibujar(self, ventana):
+        if self.aparecer:
+            ventana.blit(self.imagen, self.posicion.getPosicion())
+
+    def permitirDibujo(self, booleano):
+        self.aparecer = booleano
+
+    def getAparecer(self):
+        return self.aparecer
+
+    def getNombre(self):
+        return self.nombre
+
+    def mover(self):
+        pass
+
+    def esperar(self):
+        if self.aparecer:
+            keys = Listener.detectar()
+            juego = None
+            if keys[pygame.K_RETURN] and self.nombre != 'inicio':
+                pygame.quit()
+                if self.nombre == 'laberinto':
+                    juego = Laberinto()
+                if self.nombre == 'puzzle':
+                    juego = Puzzle()
+                if self.nombre == 'ruta':
+                    juego = Ruta()
+                if self.nombre == 'snake':
+                    juego = Snake()
+                if self.nombre == 'virus':
+                    juego = Virus()
+                juego.iniciarJuego()
+            elif keys[pygame.K_ESCAPE]:
+                self.aparecer = False
