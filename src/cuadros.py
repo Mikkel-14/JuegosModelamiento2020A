@@ -117,7 +117,11 @@ class Camino(Cuadro):
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
-        ventana.blit(self.imagen, self.posicion.getPosicion())
+        ventana.blit(pygame.transform.scale(self.imagen, (s.dim_Cuadro, s.dim_Cuadro)), self.posicion.getPosicion())
 
     def mover(self):
         pass
+
+    def obtenerPosicion(self):
+        return self.posicion.getPosicion()
+
