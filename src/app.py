@@ -21,21 +21,42 @@ ppNiña = open(obtenerPathAbsoluto("assets/ppNiña.txt"),"w")
 ppNiña.write("0,204,0")
 ppNiña.close()
 
-# Reemplazo -------
-ven_dim = (714, 476)
-ven = pygame.display.set_mode(ven_dim)
-pygame.display.set_caption('Proyecto 2020A')
 
-mapa = MapaMuseo()
-mapa.agregarCuadros(Fondo(FONDO_PATH, Posicion(0, 0)))
-with open(CAMINO_PATH) as f:
-    for line in f:
-        coords = line.strip().split(',')
-        x = int(coords[0])*34
-        y = int(coords[1])*34
-        posicion = Posicion(x, y)
-        mapa.agregarCuadros(Camino(PISO_PATH, posicion))
-# Reemplazo -------
+while True:
+    pygame.init()
+    reloj = pygame.time.Clock()
+
+
+    ven_dim = (s.columnas * s.dim_Cuadro, s.filas * s.dim_Cuadro)
+
+    ven = pygame.display.set_mode(ven_dim)
+    pygame.display.set_caption('Proyecto 2020A')
+
+    mapa = MapaMuseo()
+
+
+    mapa.agregarCuadros(Fondo(FONDO_PATH,Posicion(0,0)))
+
+    mapa.agregarCuadros(Marcador(MARCADOR_PATH, Posicion(490, 0), Puntaje(0, 1000)))
+
+    with open(CAMINO_PATH) as f:
+        for line in f:
+            coords = line.strip().split(',')
+            x = int(coords[0]) * s.dim_Cuadro
+            y = int(coords[1]) * s.dim_Cuadro
+            posicion = Posicion(x, y)
+            mapa.agregarCuadros(Camino(PISO_PATH, posicion))
+
+    with open(ESTACION_PATH) as f:
+        for line in f:
+            coords = line.strip().split(',')
+            x = int(coords[0]) * s.dim_Cuadro
+            y = int(coords[1]) * s.dim_Cuadro
+            posicion = Posicion(x, y)
+            mapa.agregarCuadros(Estacion(ALFOMBRA_PATH, posicion, coords[2]))
+
+
+
 
 mapa.agregarCuadros(Personaje(PERSONAJE_PATH, Posicion(0, 6*34)))
 solapamiento = Solapamiento(mapa)
