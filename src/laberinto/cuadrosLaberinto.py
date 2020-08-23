@@ -59,3 +59,54 @@ class PersonajeLaberinto(CuadroLaberinto):
         if keys[pygame.K_RIGHT] and sl.verificar((x + dr, y)):
             self.posicion.x += dr
             pygame.time.delay(150)
+
+
+class CaminoLaberinto(CuadroLaberinto):
+    def _init_(self, imagen, posicion):
+        self.CuadroLaberinto_posicion = posicion
+        self.imagen = pygame.image.load(imagen)
+
+    def dibujar(self, ventana):
+        ventana.blit(pygame.transform.scale(self.imagen, (34, 34)), self.posicion.getPosicion())
+
+    def mover(self):
+        pass
+
+    def obtenerPosicion(self):
+        return self.posicion.getPosicion()
+
+
+class VirusLaberinto(CuadroLaberinto):
+    def _init_(self, imagen, posicion):
+        self.CuadroLaberinto_posicion = posicion
+        self.imagen = pygame.image.load(imagen)
+
+    def dibujar(self, ventana):
+        ventana.blit(pygame.transform.scale(self.imagen, (34, 34)), self.posicion.getPosicion())
+
+    def getNombre(self):
+        return self.nombre
+
+    def mover(self):
+        pass
+
+    def obtenerPosicion(self):
+        return self.posicion.getPosicion()
+
+
+class MetaLaberinto(CuadroLaberinto):
+    def _init_(self, imagen, posicion):
+        self.CuadroLaberinto_posicion = posicion
+        self.imagen = pygame.image.load(imagen)
+
+    def dibujar(self, ventana):
+        ventana.blit(pygame.transform.scale(self.imagen, (34, 34)), self.posicion.getPosicion())
+
+    def getNombre(self):
+        return self.nombre
+
+    def mover(self):
+        pass
+
+    def obtenerPosicion(self):
+        return self.posicion.getPosicion()
