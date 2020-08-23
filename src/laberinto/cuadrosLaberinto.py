@@ -110,3 +110,80 @@ class MetaLaberinto(CuadroLaberinto):
 
     def obtenerPosicion(self):
         return self.posicion.getPosicion()
+
+class MensajeLaberinto(CuadroLaberinto):
+    def __init__(self, imagen, nombre):
+        self._CuadroLaberinto__posicion = PosicionLaberinto(0, 0)
+        self.imagen = pygame.image.load(imagen)
+        self.nombre = nombre
+        self.aparecer = False
+
+    def permitirDibujo(self, bool):
+        self.aparecer = bool
+
+    def getNombre(self):
+        return self.nombre
+
+    def getAparecer(self):
+        return self.aparecer
+
+    def esperar(self):
+        if self.aparecer:
+            keys = ListenerLaberinto.detectar()
+            if keys[pygame.K_SPACE]:
+                self.aparecer = False
+
+    def dibujar(self, ventana):
+        if self.aparecer:
+            ventana.blit(pygame.transform.scale(self.imagen, (21 * 34, 14 * 34)), self.posicion.getPosicion())
+
+    def mover(self):
+        pass
+
+class TableroLaberinto(CuadroLaberinto):
+    def __init__(self):
+        self._CuadroLaberinto__posicion = PosicionLaberinto(0,0)
+        self.dictCuadros = dict()
+        self.dictCuadros['camino'] = list()
+        self.dictCuadros['virus'] = list()
+        self.dictCuadros['personaje'] = None
+        self.dictCuadros['fondo'] = None
+        self.dictCuadros['meta'] = None
+        self.dictCuadros['mensaje'] = list()
+
+    def agregarCuadros(self, cuadro):
+        if isinstance(cuadro, CaminoLaberinto):
+             self.dictCuadros['camino'].append(cuadro)
+        elif isinstance(cuadro, VirusLaberinto):
+             self.dictCuadros['virus'].append(cuadro)
+        elif isinstance(cuadro, PersonajeLaberinto):
+             self.dictCuadros['personaje'] = cuadro
+        elif isinstance(cuadro, MetaLaberinto):
+             self.dictCuadros['meta'] = cuadro
+        elif isinstance(cuadro, FondoLaberinto):
+             self.dictCuadros['fondo'] = cuadro
+        elif isinstance(cuadro, MensajeLaberinto):
+            self.dictCuadros['mensaje'].append(cuadro)
+
+    def accederLista(self):
+        return self.dictCuadros
+
+    def dibujar(self,ventana):
+        self.dictCuadros['fondo'].dibujar(ventana)
+        for camino in self.dictCuadros['camino']:
+            camino.dibujar(ventana)
+        for virus in self.dictCuadros['virus']:
+            virus.dibujar(ventana)
+        self.dictCuadros['meta'].dibujar(ventana)
+        self.dictCuadros['personaje'].dibujar(ventana)
+        for mensaje in self.dictCuadros['mensaje']:
+            mensaje.dibujar(ventana)
+        pygame.display.update()
+
+    def mover(self, solapamiento):
+        self.dictCuadros['fondo'].mover()
+        for camino in self.dictCuadros['camino']:
+            camino.mover()
+        for virus in self.dictCuadros['virus']:
+            virus.mover()
+        self.dictCuadros['personaje'].mover(34, solapamiento)
