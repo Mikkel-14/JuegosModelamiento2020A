@@ -59,15 +59,37 @@ class Laberinto(Juego):
                 textos = line.strip().split(',')
                 self.tablero.agregarCuadros(MensajeLaberinto(textos[0], textos[1]))
 
-        bandera=True
+        self.tablero.agregarCuadros(PersonajeLaberinto(PERSONAJE_PATH, PosicionLaberinto(1 * s.dim_Cuadro, 0)))
+        self.tablero.agregarCuadros(MetaLaberinto(META_PATH, PosicionLaberinto(20 * s.dim_Cuadro, 12 * s.dim_Cuadro)))
+        self.solapamiento = SolapamientoLaberinto(self.tablero)
+        self.tablero.dibujar(self.ventana)
+        MOSTRAR_INSTRUCCIONES = True
+        bandera = True
+
         while bandera:
-            self.clock.tick(30)
-            self.ventana.blit(self.imagen, (0,0))
-            pygame.display.update()
+            self.reloj.tick(s.FPS)
+
+            lstMsj = self.tablero.accederLista()['mensaje']
+            msj = lstMsj[0]
+            for m in lstMsj:
+                if MOSTRAR_INSTRUCCIONES and m.getNombre() == 'instrucciones':
+                    m.permitirDibujo(True)
+                    msj = m
+                    MOSTRAR_INSTRUCCIONES = False
+                    self.tablero.dibujar(self.ventana)
+                    break
+                if m.getAparecer():
+                    msj = m
+            msj.esperar()
+            if not msj.getAparecer():
+                self.tablero.mover(self.solapamiento)
+                self.tablero.dibujar(self.ventana)
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     bandera=False
                     pygame.quit()
+                    break
 
     def reiniciarJuego(self):
         pass
