@@ -187,3 +187,16 @@ class TableroLaberinto(CuadroLaberinto):
         for virus in self.dictCuadros['virus']:
             virus.mover()
         self.dictCuadros['personaje'].mover(34, solapamiento)
+
+
+class VidaLaberinto(CuadroLaberinto):
+    def __init__(self, imagen1, imagen2, posicion):
+        self._CuadroLaberinto__posicion = posicion
+        self.imagenes = [pygame.image.load(imagen1), pygame.image.load(imagen2)]
+        self.booleano = 1
+
+    def dibujar(self, ventana):
+        ventana.blit(pygame.transform.scale(self.imagenes[self.booleano], (s.dim_Cuadro, s.dim_Cuadro)), self.posicion.obtenerPosicion())
+
+     def mover(self):
+        pass
