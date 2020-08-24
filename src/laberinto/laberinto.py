@@ -1,17 +1,34 @@
 import pygame
+import laberinto.settingsLaberinto as s
+from juego import *
+from laberinto.cuadrosLaberinto import *
+from laberinto.solapamientoLaberinto import *
+from herramientas import *
+pygame.init()
 import os
 import sys
 sys.path.append('../juego.py')
-from juego import *
+
+
+CAMINOLAB_PATH = obtenerPathAbsoluto('laberinto/assets/CaminoLaberinto1.txt')
+POSICION_VIRUS_PATH = obtenerPathAbsoluto('laberinto/assets/VirusLaberinto1.txt')
+FONDO_PATH = obtenerPathAbsoluto('laberinto/img/Fondo_Laberinto.png')
+PISO_PATH = obtenerPathAbsoluto('laberinto/img/Piso_Laberinto.png')
+VIRUS_PATH = obtenerPathAbsoluto('laberinto/img/Virus.png')
+META_PATH = obtenerPathAbsoluto('laberinto/img/Meta.png')
+PERSONAJE_PATH = obtenerPathAbsoluto('laberinto/img/niña.png')
+MENSAJES_PATH = obtenerPathAbsoluto('laberinto/assets/direccionesMensajesLaberinto.txt')
 
 
 class Laberinto(Juego):
     def __init__(self):
-        self.dimensiones = (958,534)
+        self.dimensiones = (s.columnas * s.dim_Cuadro, s.filas * s.dim_Cuadro)
         self.titulo = 'Laberinto'
         self.ventana = None
-        self.imagen = pygame.image.load(os.path.join(os.path.dirname(__file__),'img/inicioLaberinto.png'))
-        self.clock = pygame.time.Clock()
+        self.imagen = pygame.image.load(FONDO_PATH)
+        self.reloj = pygame.time.Clock()
+        self.tablero = None
+        self.solapamiento = None
     
     def iniciarJuego(self):
         self.ventana = pygame.display.set_mode(self.dimensiones)
