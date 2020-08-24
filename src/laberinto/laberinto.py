@@ -29,10 +29,36 @@ class Laberinto(Juego):
         self.reloj = pygame.time.Clock()
         self.tablero = None
         self.solapamiento = None
-    
+
     def iniciarJuego(self):
         self.ventana = pygame.display.set_mode(self.dimensiones)
+        self.ventana.blit(pygame.transform.scale(self.imagen, (s.columnas * s.dim_Cuadro, s.filas * s.dim_Cuadro)), (0, 0))
         pygame.display.set_caption(self.titulo)
+
+        self.tablero = TableroLaberinto()
+        self.tablero.agregarCuadros(FondoLaberinto(FONDO_PATH, PosicionLaberinto(0, 0)))
+
+        with open(CAMINOLAB_PATH) as f:
+            for line in f:
+                coords = line.strip().split(',')
+                x = int(coords[0]) * s.dim_Cuadro
+                y = int(coords[1]) * s.dim_Cuadro
+                posicion = PosicionLaberinto(x, y)
+                self.tablero.agregarCuadros(CaminoLaberinto(PISO_PATH, posicion))
+
+        with open(POSICION_VIRUS_PATH) as f:
+            for line in f:
+                coords = line.strip().split(',')
+                x = int(coords[0]) * s.dim_Cuadro
+                y = int(coords[1]) * s.dim_Cuadro
+                posicion = PosicionLaberinto(x, y)
+                self.tablero.agregarCuadros(VirusLaberinto(VIRUS_PATH, posicion))
+
+        with open(MENSAJES_PATH) as f:
+            for line in f:
+                textos = line.strip().split(',')
+                self.tablero.agregarCuadros(MensajeLaberinto(textos[0], textos[1]))
+
         bandera=True
         while bandera:
             self.clock.tick(30)
