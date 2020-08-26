@@ -31,7 +31,8 @@ class FondoLaberinto(CuadroLaberinto):
     def dibujar(self, ventana):
         ancho = s.columnas * s.dim_Cuadro
         alto = s.filas * s.dim_Cuadro
-        ventana.blit(pygame.transform.scale(self.imagen, (ancho, alto)), self.posicion.getPosicion())
+        (x, y) = (self.posicion.x, self.posicion.y)
+        ventana.blit(pygame.transform.scale(self.imagen, (ancho, alto)), (x, y))
 
     def mover(self):
         pass
@@ -44,11 +45,12 @@ class PersonajeLaberinto(CuadroLaberinto):
         self.numeroVidas = s.maximo_de_vidas
 
     def dibujar(self, ventana):
-        ventana.blit(pygame.transform.scale(self.imagen, (s.dim_Cuadro, s.dim_Cuadro)), self.posicion.getPosicion())
+        (x, y) = (self.posicion.x, self.posicion.y)
+        ventana.blit(pygame.transform.scale(self.imagen, (s.dim_Cuadro, s.dim_Cuadro)), (x, y))
 
     def mover(self, dr, sl):
         keys = ListenerLaberinto.detectar()
-        x, y = self.posicion.getPosicion()
+        (x, y) = (self.posicion.x, self.posicion.y)
         if keys[pygame.K_UP] and sl.verificar((x, y - dr)):
             self.posicion.y -= dr
             pygame.time.delay(150)
@@ -69,7 +71,8 @@ class CaminoLaberinto(CuadroLaberinto):
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
-        ventana.blit(pygame.transform.scale(self.imagen, (s.dim_Cuadro, s.dim_Cuadro)), self.posicion.getPosicion())
+        (x, y) = (self.posicion.x, self.posicion.y)
+        ventana.blit(pygame.transform.scale(self.imagen, (s.dim_Cuadro, s.dim_Cuadro)), (x, y))
 
     def mover(self):
         pass
@@ -81,7 +84,8 @@ class VirusLaberinto(CuadroLaberinto):
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
-        ventana.blit(pygame.transform.scale(self.imagen, (s.dim_Cuadro, s.dim_Cuadro)), self.posicion.getPosicion())
+        (x, y) = (self.posicion.x, self.posicion.y)
+        ventana.blit(pygame.transform.scale(self.imagen, (s.dim_Cuadro, s.dim_Cuadro)), (x, y))
 
     def getNombre(self):
         return self.nombre
@@ -96,7 +100,8 @@ class MetaLaberinto(CuadroLaberinto):
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
-        ventana.blit(pygame.transform.scale(self.imagen, (s.dim_Cuadro, s.dim_Cuadro)), self.posicion.getPosicion())
+        (x, y) = (self.posicion.x, self.posicion.y)
+        ventana.blit(pygame.transform.scale(self.imagen, (s.dim_Cuadro, s.dim_Cuadro)), (x, y))
 
     def getNombre(self):
         return self.nombre
@@ -120,15 +125,21 @@ class MensajeLaberinto(CuadroLaberinto):
     def getAparecer(self):
         return self.aparecer
 
-    def esperar(self):
+    def esperar(self, juego):
         if self.aparecer:
             keys = ListenerLaberinto.detectar()
-            if keys[pygame.K_SPACE]:
+            if keys[pygame.K_SPACE] and self.nombre != 'victoria':
+                if self.nombre == 'perdida':
+                    juego.reiniciarJuego()
                 self.aparecer = False
+            elif keys[pygame.K_ESCAPE]:
+                if self.nombre == 'perdida' or self.nombre == 'victoria':
+                    juego.salirJuego()
 
     def dibujar(self, ventana):
         if self.aparecer:
-            ventana.blit(pygame.transform.scale(self.imagen, (s.columnas * s.dim_Cuadro, s.filas * s.dim_Cuadro)), self.posicion.getPosicion())
+            (x, y) = (self.posicion.x, self.posicion.y)
+            ventana.blit(pygame.transform.scale(self.imagen, (s.columnas * s.dim_Cuadro, s.filas * s.dim_Cuadro)), (x, y))
 
     def mover(self):
         pass
@@ -143,6 +154,7 @@ class TableroLaberinto(CuadroLaberinto):
         self.dictCuadros['fondo'] = None
         self.dictCuadros['meta'] = None
         self.dictCuadros['mensaje'] = list()
+        self.dictCuadros['vidas'] = list()
 
     def agregarCuadros(self, cuadro):
         if isinstance(cuadro, CaminoLaberinto):
@@ -157,6 +169,8 @@ class TableroLaberinto(CuadroLaberinto):
              self.dictCuadros['fondo'] = cuadro
         elif isinstance(cuadro, MensajeLaberinto):
             self.dictCuadros['mensaje'].append(cuadro)
+        elif isinstance(cuadro, VidaLaberinto):
+            self.dictCuadros['vidas'].append(cuadro)
 
     def dibujar(self,ventana):
         self.dictCuadros['fondo'].dibujar(ventana)
@@ -166,6 +180,8 @@ class TableroLaberinto(CuadroLaberinto):
             virus.dibujar(ventana)
         self.dictCuadros['meta'].dibujar(ventana)
         self.dictCuadros['personaje'].dibujar(ventana)
+        for vida in self.dictCuadros['vidas']:
+            vida.dibujar(ventana)
         for mensaje in self.dictCuadros['mensaje']:
             mensaje.dibujar(ventana)
         pygame.display.update()
@@ -176,7 +192,7 @@ class TableroLaberinto(CuadroLaberinto):
             camino.mover()
         for virus in self.dictCuadros['virus']:
             virus.mover()
-        self.dictCuadros['personaje'].mover(34, solapamiento)
+        self.dictCuadros['personaje'].mover(s.velocidad, solapamiento)
 
 
 class VidaLaberinto(CuadroLaberinto):
@@ -186,7 +202,8 @@ class VidaLaberinto(CuadroLaberinto):
         self.booleano = 1
 
     def dibujar(self, ventana):
-        ventana.blit(pygame.transform.scale(self.imagenes[self.booleano], (s.dim_Cuadro, s.dim_Cuadro)), self.posicion.obtenerPosicion())
+        (x, y) = (self.posicion.x, self.posicion.y)
+        ventana.blit(pygame.transform.scale(self.imagenes[self.booleano], (s.dim_Cuadro, s.dim_Cuadro)), (x, y))
 
     def mover(self):
         pass
