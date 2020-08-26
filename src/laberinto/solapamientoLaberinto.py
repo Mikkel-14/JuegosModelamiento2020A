@@ -4,33 +4,29 @@ class SolapamientoLaberinto:
         self.tablero = tablero
 
     def verificar(self, posiblePos):
-        camino = self.verificarCamino(posiblePos)
-        virus = self.verificarVirus(posiblePos)
-        meta = self.verificarMeta(posiblePos)
-        return camino or virus or meta
-
-    def verificarCamino(self, posiblePos):
-        dict = self.tablero.accederLista()
+        caminoB = False
+        virusB = False
+        metaB = False
+        dict = self.tablero.dictCuadros
         for piso in dict['camino']:
-            if piso.obtenerPosicion() == posiblePos:
-                return True
-        return False
-
-    def verificarVirus(self, posiblePos):
-        dict = self.tablero.accederLista()
+            (x, y) = (piso.posicion.x, piso.posicion.y)
+            if (x, y) == posiblePos:
+                caminoB = True
         for virus in dict['virus']:
-            if virus.obtenerPosicion() == posiblePos:
-                for mensaje in dict['mensaje']:
-                    if mensaje.getNombre() == 'perdida':
-                        mensaje.permitirDibujo(True)
-                return True
-        return False
-
-    def verificarMeta(self, posiblePos):
-        dict = self.tablero.accederLista()
-        if dict['meta'].obtenerPosicion() == posiblePos:
+            (x, y) = (virus.posicion.x, virus.posicion.y)
+            if (x, y) == posiblePos:
+                dict['personaje'].numeroVidas -= 1
+                corazon = dict['personaje'].numeroVidas
+                dict['vidas'][corazon].booleano = 0
+                if dict['personaje'].numeroVidas == 0:
+                    for mensaje in dict['mensaje']:
+                        if mensaje.getNombre() == 'perdida':
+                            mensaje.permitirDibujo(True)
+                virusB = True
+        (a, b) = (dict['meta'].posicion.x, dict['meta'].posicion.y)
+        if (a, b) == posiblePos:
             for mensaje in dict['mensaje']:
                 if mensaje.getNombre() == 'victoria':
                     mensaje.permitirDibujo(True)
-            return True
-        return False
+            metaB = True
+        return caminoB or virusB or metaB
