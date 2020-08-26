@@ -72,9 +72,6 @@ class CaminoLaberinto(CuadroLaberinto):
     def mover(self):
         pass
 
-    def obtenerPosicion(self):
-        return self.posicion.getPosicion()
-
 
 class VirusLaberinto(CuadroLaberinto):
     def _init_(self, imagen, posicion):
@@ -90,9 +87,6 @@ class VirusLaberinto(CuadroLaberinto):
     def mover(self):
         pass
 
-    def obtenerPosicion(self):
-        return self.posicion.getPosicion()
-
 
 class MetaLaberinto(CuadroLaberinto):
     def _init_(self, imagen, posicion):
@@ -107,9 +101,6 @@ class MetaLaberinto(CuadroLaberinto):
 
     def mover(self):
         pass
-
-    def obtenerPosicion(self):
-        return self.posicion.getPosicion()
 
 class MensajeLaberinto(CuadroLaberinto):
     def __init__(self, imagen, nombre):
