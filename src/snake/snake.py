@@ -30,7 +30,8 @@ class Snake(object):
             keys = Control_Movimiento.detectarMovimiento()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    exit()
+                    pygame.quit()
+                    return True
             if keys[pygame.K_RETURN]:
                 break
         while bandera and self.vidas>=0:
@@ -39,7 +40,8 @@ class Snake(object):
                 clock.tick(self.velocidad)
                 for event in pygame.event.get():
                         if event.type == pygame.QUIT:
-                            exit()
+                            pygame.quit()
+                            return True
                 cabeza.mover(limiteVentanaX,limiteVentanaY)
                 run=mapa.verificarColision(self.ventana.obtenerLimites(),malware.obtenerPosicion())
                 if run[0]:
@@ -72,7 +74,8 @@ class Snake(object):
             while True:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
-                        exit()
+                        pygame.quit()
+                        return True
                 keys = Control_Movimiento.detectarMovimiento()
                 if keys[pygame.K_ESCAPE]:
                     bandera=False
@@ -91,6 +94,7 @@ class Snake(object):
                 segmento.cambiarPosicion((-128,-128))
             run=[False,False]
         pygame.quit()
+        return True
 
     def reiniciar(self,cola):
         long= len(cola.obtenerCola())
