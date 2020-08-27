@@ -74,3 +74,24 @@ class VentanaLaberinto:
                 mensaje.permitirDibujo(True)
                 mensaje.dibujar(self.win)
         pygame.display.update()
+
+    def manejarMensajes(self, instr, juego):
+        lstMsj = self.tablero.dictCuadros['mensaje']
+        for m in lstMsj:
+            if m.getAparecer():
+                keys = ListenerLaberinto.detectar()
+                if m.getNombre() == 'instrucciones' and keys[pygame.K_SPACE]:
+                    m.permitirDibujo(False)
+                    return True
+                elif m.getNombre() == 'victoria' and keys[pygame.K_ESCAPE]:
+                    juego.salirJuego()
+                    return True
+                elif m.getNombre() == 'perdida':
+                    if keys[pygame.K_SPACE]:
+                        juego.reiniciarJuego()
+                        return True
+                    elif keys[pygame.K_ESCAPE]:
+                        juego.salirJuego()
+                        return True
+                return False
+        return True
