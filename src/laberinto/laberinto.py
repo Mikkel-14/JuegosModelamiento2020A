@@ -1,33 +1,58 @@
 import pygame
+from juego import *
+import laberinto.settingsLaberinto as s
+from laberinto.ventanaLaberinto import *
+pygame.init()
 import os
 import sys
 sys.path.append('../juego.py')
-from juego import *
 
+bandera = True
 
 class Laberinto(Juego):
     def __init__(self):
-        self.dimensiones = (958,534)
-        self.titulo = 'Laberinto'
         self.ventana = None
-        self.imagen = pygame.image.load(os.path.join(os.path.dirname(__file__),'img/inicioLaberinto.png'))
-        self.clock = pygame.time.Clock()
-    
+
     def iniciarJuego(self):
-        self.ventana = pygame.display.set_mode(self.dimensiones)
-        pygame.display.set_caption(self.titulo)
-        bandera=True
+        self.ventana = VentanaLaberinto()
+        self.ventana.cargarTablero()
+        MOSTRAR_INSTRUCCIONES = True
+        bandera = True
+
         while bandera:
-            self.clock.tick(30)
-            self.ventana.blit(self.imagen, (0,0))
-            pygame.display.update()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    bandera=False
-                    pygame.quit()
+            self.ventana.reloj.tick(s.FPS)
+            manejo = self.ventana.manejarMensajes(MOSTRAR_INSTRUCCIONES, self)
+
+            try:
+                if manejo and bandera:
+                    self.ventana.tablero.dictCuadros['personaje'].mover(s.velocidad, self.ventana.solapamiento)
+                    self.ventana.tablero.dictCuadros['fondo'].dibujar(self.ventana.win)
+                    for camino in self.ventana.tablero.dictCuadros['camino']:
+                        camino.dibujar(self.ventana.win)
+                    for virus in self.ventana.tablero.dictCuadros['virus']:
+                        virus.dibujar(self.ventana.win)
+                    self.ventana.tablero.dictCuadros['meta'].dibujar(self.ventana.win)
+                    self.ventana.tablero.dictCuadros['personaje'].dibujar(self.ventana.win)
+                    for vida in self.ventana.tablero.dictCuadros['vidas']:
+                        vida.dibujar(self.ventana.win)
+                    for mensaje in self.ventana.tablero.dictCuadros['mensaje']:
+                        mensaje.dibujar(self.ventana.win)
+                    pygame.display.update()
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        bandera = False
+                        pygame.quit()
+                        break
+            except Exception:
+                break
 
     def reiniciarJuego(self):
-        pass
+        bandera = False
+        pygame.quit()
+        pygame.init()
+        self.iniciarJuego()
 
     def salirJuego(self):
-        pass
+        bandera = False
+        pygame.quit()
