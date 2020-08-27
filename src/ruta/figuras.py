@@ -52,7 +52,7 @@ class Camino(Figura):
             alturaImagen = self.imagen.get_rect().height
             relativoY = y % alturaImagen
             self.distancia = abs(y)
-            if(self.distancia <= alturaImagen*3):
+            if(self.distancia <= alturaImagen*4):
                 ventana.blit(self.imagen, (x, relativoY - alturaImagen))
                 if relativoY < settings['tamañoVentana'][1]:
                     ventana.blit(self.imagen, (x, relativoY))
