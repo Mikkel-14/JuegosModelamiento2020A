@@ -6,10 +6,7 @@ class PuntajeRuta:
 
     def incrementar(self):
         pass
-
-    def actualizar(self):
-        pass
     
-    def get_puntaje(self):
+    def getPuntos(self):
         return self.puntos
         

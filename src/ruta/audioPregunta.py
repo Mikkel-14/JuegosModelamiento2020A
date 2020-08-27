@@ -5,29 +5,28 @@ from ruta.figuras import *
 
 
 class AudioPregunta:
-    def __init__(self, audio, letraRespuesta, opciones):
+    def __init__(self, audio, letraRespuesta):
         pygame.mixer.init()
         self.audio = pygame.mixer.Sound(obtenerPathAbsoluto(audio, __file__))
         self.letraRespuesta = letraRespuesta
-        self.opciones = opciones
-        self.estadoReproducido = True
+        self.estadoReproducion = True
 
-    def reproducir(self, camino):
+    def reproducir(self, camino, opciones):
         keys = pygame.key.get_pressed()
         if(keys[pygame.K_s] and camino.notificar() == False):
-            self.estadoReproducido = False
+            self.estadoReproducion = False
         
-        if(self.estadoReproducido and camino.notificar() == False):
+        if(self.estadoReproducion and camino.notificar() == False):
             self.audio.play()
 
-        if(self.estadoReproducido == False and camino.notificar() == False ):
+        if(self.estadoReproducion == False and camino.notificar() == False ):
             pygame.mixer.stop()
-            for opcion in self.opciones:
+            for opcion in opciones:
                 if opcion.obtenerVisibilidad() == False:
                     opcion.setVisibilidad(True)
 
     def setEstadoReproducido(self, value):
-        self.estadoReproducido = value
+        self.estadoReproducion = value
     
     def obtenerLetraRespuesta(self):
         return self.letraRespuesta

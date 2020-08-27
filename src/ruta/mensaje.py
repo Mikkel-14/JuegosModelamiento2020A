@@ -22,7 +22,7 @@ class MensajeRuta:
 
     def mostrar(self, ventana):
         self.visibilidad = True
-
+        
         while self.visibilidad:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -36,6 +36,3 @@ class MensajeRuta:
             for boton in self.boton:
                 boton.render(ventana)
             pygame.display.update()
-
-    def mover(self):
-        pass

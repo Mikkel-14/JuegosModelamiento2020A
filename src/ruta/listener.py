@@ -1,7 +1,6 @@
 import pygame
 from ruta.listener import *
 
-
 class ListenerRuta:
     @staticmethod
     def captarMouse():

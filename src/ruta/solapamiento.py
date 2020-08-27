@@ -5,7 +5,6 @@ import math
 class SolapamientoRuta:
     def __init__(self, umbral, verificacion):
         self.umbral = umbral
-        self.opcion = None
         self.posicionOpcion = None
         self.letraSeleccionada = None
         self.verificacion = verificacion

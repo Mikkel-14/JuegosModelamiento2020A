@@ -36,12 +36,12 @@ class Fondo(Figura):
 
 class Camino(Figura):
     def __init__(self, imagen, posicion):
+        super().__init__(posicion)
         self.imagen = pygame.image.load(obtenerPathAbsoluto(imagen, __file__))
         self.imagen = pygame.transform.scale(
             self.imagen, settings["tamañoCamino"])
         self.estadoMovimiento = True
-        super().__init__(posicion)
-
+        
     def dibujar(self, ventana):
         posicion = self.posicion.getPosicion()
         ventana.blit(self.imagen, (posicion[0], settings["tamañoCamino"][1]))
@@ -52,7 +52,7 @@ class Camino(Figura):
             alturaImagen = self.imagen.get_rect().height
             relativoY = y % alturaImagen
             self.distancia = abs(y)
-            if(self.distancia <= alturaImagen*4):
+            if(self.distancia <= alturaImagen*3):
                 ventana.blit(self.imagen, (x, relativoY - alturaImagen))
                 if relativoY < settings['tamañoVentana'][1]:
                     ventana.blit(self.imagen, (x, relativoY))
@@ -75,6 +75,7 @@ class Personaje(Figura):
         self.imagen = pygame.transform.scale(self.imagen, settings["tamañoPersonaje"])
         self.solapamiento = solapamiento
         super().__init__(posicion)
+
 
     def dibujar(self, ventana):
         ventana.blit(self.imagen, self.posicion.getPosicion())
@@ -101,12 +102,6 @@ class FiguraVida(Figura):
     def dibujar(self, ventana):
         if(self.numeroVidas == 4):
             self.imagen = pygame.image.load(obtenerPathAbsoluto('img/vida4.png', __file__))
-        elif(self.numeroVidas == 3):
-            self.imagen = pygame.image.load(obtenerPathAbsoluto('img/vida3.png', __file__))
-        elif(self.numeroVidas == 2):
-            self.imagen = pygame.image.load(obtenerPathAbsoluto('img/vida2.png', __file__))
-        elif(self.numeroVidas == 1):
-            self.imagen = pygame.image.load(obtenerPathAbsoluto('img/vida1.png', __file__))
         else:
             self.imagen = pygame.image.load(obtenerPathAbsoluto('img/vida3.png', __file__))
         self.imagen = pygame.transform.scale(self.imagen, settings["tamañoFigVida"])
@@ -114,7 +109,6 @@ class FiguraVida(Figura):
     
     def disminuirVidas(self):
         self.numeroVidas = self.numeroVidas - 1
-
 
     def mover(self):
         pass
@@ -189,6 +183,9 @@ class Mapa(Figura):
         elif isinstance(figura, FiguraOpcion):
             self.dictFiguras['figuraOpcion'].append(figura)
 
+    def quitarFigura(self):
+        pass
+
     def dibujar(self, ventana):
         for key in self.dictFiguras:
             if key != 'figuraOpcion' and key != 'personaje':
@@ -212,3 +209,5 @@ class Mapa(Figura):
         else:
             self.dictFiguras['figuraVida'].disminuirVidas()
             pass
+            
+
