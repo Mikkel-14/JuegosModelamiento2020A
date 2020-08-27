@@ -6,4 +6,10 @@ class VerificacionRuta:
         self.mapa = mapa
         self.respuestaPregunta = audioPregunta.obtenerLetraRespuesta()
 
-    
+    def verificarSeleccion(self, letraSeleccionada):
+        opciones = self.mapa.obtenerOpciones()
+        for opcion in opciones:
+            if(self.respuestaPregunta == letraSeleccionada):
+                self.mapa.actualizar(True)
+            else:
+                self.mapa.actualizar(False)
