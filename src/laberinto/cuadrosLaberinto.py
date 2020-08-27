@@ -52,16 +52,16 @@ class PersonajeLaberinto(CuadroLaberinto):
         keys = ListenerLaberinto.detectar()
         (x, y) = (self.posicion.x, self.posicion.y)
         if keys[pygame.K_UP] and sl.verificar((x, y - dr)):
-            self.posicion.y -= dr
+            self.posicion.actualizarY(y - dr)
             pygame.time.delay(150)
         if keys[pygame.K_DOWN] and sl.verificar((x, y + dr)):
-            self.posicion.y += dr
+            self.posicion.actualizarY(y + dr)
             pygame.time.delay(150)
         if keys[pygame.K_LEFT] and sl.verificar((x - dr, y)):
-            self.posicion.x -= dr
+            self.posicion.actualizarX(x - dr)
             pygame.time.delay(150)
         if keys[pygame.K_RIGHT] and sl.verificar((x + dr, y)):
-            self.posicion.x += dr
+            self.posicion.actualizarX(x + dr)
             pygame.time.delay(150)
 
 
@@ -87,9 +87,6 @@ class VirusLaberinto(CuadroLaberinto):
         (x, y) = (self.posicion.x, self.posicion.y)
         ventana.blit(pygame.transform.scale(self.imagen, (s.dim_Cuadro, s.dim_Cuadro)), (x, y))
 
-    def getNombre(self):
-        return self.nombre
-
     def mover(self):
         pass
 
@@ -102,9 +99,6 @@ class MetaLaberinto(CuadroLaberinto):
     def dibujar(self, ventana):
         (x, y) = (self.posicion.x, self.posicion.y)
         ventana.blit(pygame.transform.scale(self.imagen, (s.dim_Cuadro, s.dim_Cuadro)), (x, y))
-
-    def getNombre(self):
-        return self.nombre
 
     def mover(self):
         pass
@@ -124,17 +118,6 @@ class MensajeLaberinto(CuadroLaberinto):
 
     def getAparecer(self):
         return self.aparecer
-
-    def esperar(self, juego):
-        if self.aparecer:
-            keys = ListenerLaberinto.detectar()
-            if keys[pygame.K_SPACE] and self.nombre != 'victoria':
-                if self.nombre == 'perdida':
-                    juego.reiniciarJuego()
-                self.aparecer = False
-            elif keys[pygame.K_ESCAPE]:
-                if self.nombre == 'perdida' or self.nombre == 'victoria':
-                    juego.salirJuego()
 
     def dibujar(self, ventana):
         if self.aparecer:
