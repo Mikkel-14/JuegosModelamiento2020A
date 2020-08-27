@@ -1,4 +1,3 @@
-from Boton import Boton
 import pygame
 import os.path
 

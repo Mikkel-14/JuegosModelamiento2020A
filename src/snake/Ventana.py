@@ -1,10 +1,9 @@
-from Mapa import Mapa
+from snake.Mapa import Mapa
 #from Marcador import Marcador
 import pygame
 import sys
 import os.path
 from pygame.locals import *
-
 
 bg = pygame.image.load(os.path.join(os.path.dirname(__file__), "img/BG.png"))
 

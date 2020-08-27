@@ -1,11 +1,11 @@
 import pygame
-from Colision import Colision
-from Fabrica_Troyano import Fabrica_Troyano
-from Fabrica_Spyware import Fabrica_Spyware
-from Fabrica_Bomba import Fabrica_Bomba
+from snake.Colision import Colision
+from snake.Fabrica_Troyano import Fabrica_Troyano
+from snake.Fabrica_Spyware import Fabrica_Spyware
+from snake.Fabrica_Bomba import Fabrica_Bomba
 from random import randint
-from Cabeza import Cabeza
-from Cola import Cola
+from snake.Cabeza import Cabeza
+from snake.Cola import Cola
 
 
 

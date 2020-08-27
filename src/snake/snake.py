@@ -1,7 +1,7 @@
-from Ventana import *
 import pygame
-from Control_Movimiento import *
-from Mensaje import *
+from snake.Control_Movimiento import *
+from snake.Mensaje import *
+from snake.Ventana import *
 class Snake(object):
     def __init__(self):
         self.ventana=None

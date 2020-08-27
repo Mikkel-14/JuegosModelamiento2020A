@@ -1,7 +1,7 @@
 
 import pygame
 import os.path
-from Control_Movimiento import Control_Movimiento
+from snake.Control_Movimiento import Control_Movimiento
 
 pygame.init()
 

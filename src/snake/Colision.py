@@ -1,4 +1,4 @@
-from Segmento_Cuerpo import Segmento_Cuerpo
+from snake.Segmento_Cuerpo import Segmento_Cuerpo
 class Colision():
 
     def colisionarCabezaMalware(self,posCabeza,posMalware):

@@ -1,4 +1,4 @@
-from Figura import Figura
+from snake.Figura import Figura
 
 import pygame
 import os
