@@ -156,37 +156,21 @@ class TableroLaberinto(CuadroLaberinto):
             self.dictCuadros['vidas'].append(cuadro)
 
     def dibujar(self,ventana):
-        self.dictCuadros['fondo'].dibujar(ventana)
-        for camino in self.dictCuadros['camino']:
-            camino.dibujar(ventana)
-        for virus in self.dictCuadros['virus']:
-            virus.dibujar(ventana)
-        self.dictCuadros['meta'].dibujar(ventana)
-        self.dictCuadros['personaje'].dibujar(ventana)
-        for vida in self.dictCuadros['vidas']:
-            vida.dibujar(ventana)
-        for mensaje in self.dictCuadros['mensaje']:
-            mensaje.dibujar(ventana)
-        pygame.display.update()
+        pass
 
     def mover(self, solapamiento):
-        self.dictCuadros['fondo'].mover()
-        for camino in self.dictCuadros['camino']:
-            camino.mover()
-        for virus in self.dictCuadros['virus']:
-            virus.mover()
-        self.dictCuadros['personaje'].mover(s.velocidad, solapamiento)
+        pass
 
 
 class VidaLaberinto(CuadroLaberinto):
     def __init__(self, imagen1, imagen2, posicion):
         self._CuadroLaberinto__posicion = posicion
         self.imagenes = [pygame.image.load(imagen1), pygame.image.load(imagen2)]
-        self.booleano = 1
+        self.lleno = 1
 
     def dibujar(self, ventana):
         (x, y) = (self.posicion.x, self.posicion.y)
-        ventana.blit(pygame.transform.scale(self.imagenes[self.booleano], (s.dim_Cuadro, s.dim_Cuadro)), (x, y))
+        ventana.blit(pygame.transform.scale(self.imagenes[self.lleno], (s.dim_Cuadro, s.dim_Cuadro)), (x, y))
 
     def mover(self):
         pass
