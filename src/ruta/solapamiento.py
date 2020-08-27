@@ -18,3 +18,6 @@ class SolapamientoRuta:
             if distancia <= self.umbral:
                 self.verificacion.verificarSeleccion(self.letraSeleccionada)
     
+    def actualizar(self, posicionOpcion, letra):
+        self.letraSeleccionada = letra
+        self.posicionOpcion = posicionOpcion
