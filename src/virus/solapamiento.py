@@ -36,3 +36,19 @@ class Solapamiento:
                 return True
 
         return False
+
+    def verificarSolapamientoCuadroObjetivo(self, coordenadaActual, nuevasCoordenadas):
+        for pagina in self.mapa.dictCuadros['cuadroPaginaWeb']:
+            self.pagina = pagina
+            posicion, esMalo = self.pagina.obtenerEstado() #obtener informacion de posicion y estado de un cuadro pagina web
+            if posicion == coordenadaActual and esMalo == False: #busca el cuadro sobre el que se encuentra el personaje y lo transforma a un virus
+                paginaAcual = self.pagina
+        if self.mapa.dictCuadros['cuadroObjetivo'].getCoordenadas() == nuevasCoordenadas:
+            paginaAcual.transformar()
+            self.tipoCuadroSolapado = 'objetivo'
+            self.notify()
+            return True
+        return False
+
+    def notify(self):
+        self.juego.update(self.tipoCuadroSolapado)
