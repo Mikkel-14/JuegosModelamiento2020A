@@ -3,6 +3,7 @@ from juego import *
 import laberinto.settingsLaberinto as s
 from laberinto.ventanaLaberinto import *
 pygame.init()
+s.init()
 import os
 import sys
 sys.path.append('../juego.py')

@@ -5,6 +5,7 @@ from laberinto.solapamientoLaberinto import *
 from herramientas import *
 from puntaje import *
 pygame.init()
+s.init()
 
 CAMINOLAB_PATH = obtenerPathAbsoluto('laberinto/assets/CaminoLaberinto1.txt')
 POSICION_VIRUS_PATH = obtenerPathAbsoluto('laberinto/assets/VirusLaberinto1.txt')
