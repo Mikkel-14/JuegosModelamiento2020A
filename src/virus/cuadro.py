@@ -10,10 +10,6 @@ class Cuadro(ABC):
         self.posicion = posicion
         super().__init__()
 
-    @property
-    def posicion(self):
-        return self.__posicion
-
     @abstractmethod
     def dibujar(self):
         pass
@@ -24,7 +20,7 @@ class Cuadro(ABC):
 
 class CuadroPared(Cuadro):
     def __init__(self, imagen, posicion):
-        self._Cuadro__posicion = posicion
+        super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
@@ -35,7 +31,7 @@ class CuadroPared(Cuadro):
 
 class CuadroPaginaWeb(Cuadro):
     def __init__(self, imagen, imagenMala, posicion):
-        self._Cuadro__posicion = posicion
+        super().__init__(posicion)
         self.imagenBuena = pygame.image.load(imagen)
         self.imagenMala = pygame.image.load(imagenMala)
         self.esMalo = False
@@ -59,7 +55,7 @@ class CuadroPaginaWeb(Cuadro):
 
 class CuadroObjetivo(Cuadro):
     def __init__(self, imagen, posicion):
-        self._Cuadro__posicion = posicion
+        super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
@@ -73,7 +69,7 @@ class CuadroObjetivo(Cuadro):
 
 class CuadroPersonaje(Cuadro):
     def __init__(self, imagen, posicion, solapamiento):
-        self._Cuadro__posicion = posicion
+        super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
         self.solapamiento = solapamiento
 
@@ -99,7 +95,7 @@ class CuadroPersonaje(Cuadro):
 
 class Mensaje(Cuadro):
     def __init__(self, imagen, nombre, posicion):
-        self._Cuadro__posicion = posicion
+        super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
         self.nombre = nombre
         self.aparecer = False
@@ -139,7 +135,7 @@ class Mensaje(Cuadro):
 class Mapa(Cuadro):
 
     def __init__(self, imagen):
-        self._Cuadro__posicion = Posicion(0,0)
+        super().__init__(Posicion(0,0))
         self.imagen = pygame.image.load(imagen)
         self.dictCuadros = dict()
         self.dictCuadros['cuadroObjetivo'] = None
