@@ -1,14 +1,14 @@
+from virus.virus import *
+from laberinto.laberinto import *
+from ruta.ruta import *
+from snake.snake import *
+from puzzle.puzzle import *
 import pygame
 import os
 import settings as s
 from abc import ABC, abstractmethod
 from posicion import *
 from listener import *
-from virus.virus import *
-from laberinto.laberinto import *
-from ruta.ruta import *
-from snake.snake import *
-from puzzle.puzzle import *
 
 pygame.init()
 
@@ -190,7 +190,7 @@ class Mensaje(Cuadro):
                 if self.nombre == 'snake':
                     juego = Snake()
                 if self.nombre == 'virus':
-                    juego = Virus()
+                    juego = EvitandoVirus()
                 juego.iniciarJuego()
             elif keys[pygame.K_ESCAPE]:
                 self.aparecer = False
