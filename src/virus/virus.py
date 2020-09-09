@@ -1,15 +1,13 @@
 import pygame
 import os
 import sys
-sys.path.append('../juego.py')
-from juego import *
 from virus.cuadro import *
 from virus.posicion import *
 
 
 # NOTE: dado que las dimensiones de este juego son 600 x 550, se consideraran 24 columnas y 22 filas
 # NOTE: las dimensiones de cada imagen que interactuara con el juego son de 25px por 25px
-class EvitandoVirus(Juego):
+class EvitandoVirus():
 
     def __init__(self):
         pygame.init()

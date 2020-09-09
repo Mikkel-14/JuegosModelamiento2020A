@@ -3,7 +3,6 @@ import laberinto.settingsLaberinto as s
 from laberinto.cuadrosLaberinto import *
 from laberinto.solapamientoLaberinto import *
 from herramientas import *
-from puntaje import *
 pygame.init()
 s.init()
 

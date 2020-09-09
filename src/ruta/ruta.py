@@ -1,4 +1,3 @@
-from juego import *
 import pygame
 import os
 import sys
@@ -10,13 +9,13 @@ from ruta.assets.settings import *
 from ruta.boton import *
 from ruta.audioPregunta import *
 from ruta.puntaje import *
-sys.path.append('../juego.py')
 
 
-class Ruta(Juego):
+
+class Ruta():
     def __init__(self):
         self.mapa = Mapa
-        self.puntaje = PuntajeRuta        
+        self.puntaje = PuntajeRuta
 
     def mostrarMensajesIniciales(self):
         self.ventana = pygame.display.set_mode(settings["tamañoVentana"])
@@ -39,7 +38,7 @@ class Ruta(Juego):
 
     def iniciarJuego(self):
         self.mostrarMensajesIniciales()
-        
+
         # preconfiguraciones
         self.ventana = pygame.display.set_mode(settings["tamañoVentana"])
         pygame.display.set_caption(settings["nombre"])
