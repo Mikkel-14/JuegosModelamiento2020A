@@ -2,7 +2,6 @@ import pygame
 import settings as s
 from cuadros import *
 from solapamiento import *
-from puntaje import *
 import os.path as path
 from herramientas import *
 

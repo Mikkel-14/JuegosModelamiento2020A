@@ -1,16 +1,14 @@
 import pygame
-from juego import *
 import laberinto.settingsLaberinto as s
 from laberinto.ventanaLaberinto import *
 pygame.init()
 s.init()
 import os
 import sys
-sys.path.append('../juego.py')
 
 bandera = True
 
-class Laberinto(Juego):
+class Laberinto():
     def __init__(self):
         self.ventana = None
 
