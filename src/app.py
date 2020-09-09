@@ -4,6 +4,7 @@ from cuadros import *
 from solapamiento import *
 import os.path as path
 from herramientas import *
+from posicion import Posicion
 
 CAMINO_PATH = obtenerPathAbsoluto('assets/matrizCamino.txt')
 ESTACION_PATH = obtenerPathAbsoluto('assets/matrizEstacion.txt')
@@ -14,17 +15,19 @@ PERSONAJE_PATH = obtenerPathAbsoluto('img/personaje.png')
 MENSAJE_PATH = obtenerPathAbsoluto('assets/direccionesMensajes.txt')
 MARCADOR_PATH = obtenerPathAbsoluto('img/marcador.png')
 INSTRUCCIONES = True
+PUNTOS_PATH = obtenerPathAbsoluto('assets/puntos.dat')
 s.init()
 
 ppNiña = open(obtenerPathAbsoluto("assets/ppNiña.txt"),"w")
 ppNiña.write("0,204,0")
 ppNiña.close()
-
+puntos = open(PUNTOS_PATH, 'w')
+puntos.write('0')
+puntos.close()
 
 while True:
     pygame.init()
     reloj = pygame.time.Clock()
-
 
     ven_dim = (s.columnas * s.dim_Cuadro, s.filas * s.dim_Cuadro)
 
@@ -33,10 +36,8 @@ while True:
 
     mapa = MapaMuseo()
 
-
     mapa.agregarCuadros(Fondo(FONDO_PATH,Posicion(0,0)))
-
-    #mapa.agregarCuadros(Marcador(MARCADOR_PATH, Posicion(490, 0), Puntaje(0, 1000)))
+    mapa.agregarCuadros(Marcador(MARCADOR_PATH, Posicion(490, 0), PUNTOS_PATH))
 
     with open(CAMINO_PATH) as f:
         for line in f:
@@ -54,41 +55,47 @@ while True:
             posicion = Posicion(x, y)
             mapa.agregarCuadros(Estacion(ALFOMBRA_PATH, posicion, coords[2]))
 
-    with open(MENSAJE_PATH) as f:
-        for line in f:
-            textos = line.strip().split(',')
-            mapa.agregarCuadros(Mensaje(obtenerPathAbsoluto(textos[0]),textos[1]))
-
     ppNiña = open(obtenerPathAbsoluto("assets/ppNiña.txt"),"r")
     listNiña = ppNiña.readline().split(",")
     ppNiña.close()
     mapa.agregarCuadros(Personaje(PERSONAJE_PATH, Posicion(int(listNiña[0]),int(listNiña[1]))))
+
+    with open(MENSAJE_PATH) as f:
+        for line in f:
+            textos = line.strip().split(',')
+            mapa.agregarCuadros(Mensaje(obtenerPathAbsoluto(textos[0]),textos[1]))
     solapamiento = Solapamiento(mapa)
-    mapa.dibujar(ven)
+
+    for cuadro in mapa.listaCuadros:
+        cuadro.dibujar(ven)
+    pygame.display.update()
 
     while True:
-
         reloj.tick(s.FPS)
-
         try:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
-
         except Exception:
             break
-        lstMsj = mapa.accederLista()['mensaje']
-        msj = lstMsj[0]
-        for m in lstMsj:
-            if m.getNombre() == 'inicio' and INSTRUCCIONES:
-                m.permitirDibujo(True)
-                INSTRUCCIONES = False
-                break
-            if m.getAparecer():
-                msj = m
 
-        msj.esperar()
+        for m in mapa.listaCuadros:
+            if isinstance(m, Mensaje):
+                if m.getNombre() == 'inicio' and INSTRUCCIONES:
+                    m.permitirDibujo(True)
+                    m.dibujar(ven)
+                    INSTRUCCIONES = False
+                if m.getAparecer():
+                    msj = m
+        try:
+            msj.esperar()
+            pygame.display.update()
+        except:
+            break
+
         if not msj.getAparecer():
-            mapa.mover(solapamiento)
-            mapa.dibujar(ven)
+            for cuadro in mapa.listaCuadros:
+                if isinstance(cuadro, Personaje):
+                    cuadro.mover(s.velocidad, solapamiento)
+                cuadro.dibujar(ven)
