@@ -36,7 +36,7 @@ while True:
 
     mapa.agregarCuadros(Fondo(FONDO_PATH,Posicion(0,0)))
 
-    mapa.agregarCuadros(Marcador(MARCADOR_PATH, Posicion(490, 0), Puntaje(0, 1000)))
+    #mapa.agregarCuadros(Marcador(MARCADOR_PATH, Posicion(490, 0), Puntaje(0, 1000)))
 
     with open(CAMINO_PATH) as f:
         for line in f:

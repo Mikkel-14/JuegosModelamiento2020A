@@ -1,14 +1,10 @@
-from virus.virus import *
-from laberinto.laberinto import *
-from ruta.ruta import *
-from snake.snake import *
-from puzzle.puzzle import *
 import pygame
 import os
 import settings as s
 from abc import ABC, abstractmethod
-from posicion import *
+from posicion import Posicion
 from listener import *
+from fachadaJuegos import *
 
 pygame.init()
 
@@ -17,10 +13,6 @@ class Cuadro(ABC):
     def __init__(self, posicion):
         self.posicion = posicion
         super().__init__()
-
-    @property
-    def posicion(self):
-        return self.__posicion
 
     @abstractmethod
     def dibujar(self):
@@ -33,7 +25,7 @@ class Cuadro(ABC):
 
 class Fondo(Cuadro):
     def __init__(self, imagen, posicion):
-        self._Cuadro__posicion = posicion
+        super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
@@ -47,7 +39,7 @@ class Fondo(Cuadro):
 
 class Personaje(Cuadro):
     def __init__(self, imagen, posicion):
-        self._Cuadro__posicion = posicion
+        super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
@@ -70,59 +62,24 @@ class Personaje(Cuadro):
             pygame.time.delay(150)
 
 
-
 class MapaMuseo(Cuadro):
     def __init__(self):
-        self._Cuadro__posicion = Posicion(0,0)
-        self.dictCuadros = dict()
-        self.dictCuadros['camino'] = list()
-        self.dictCuadros['estaciones'] = list()
-        self.dictCuadros['personaje'] = None
-        self.dictCuadros['fondo'] = None
-        self.dictCuadros['mensaje'] = list()
-        self.dictCuadros['marcador'] = None
-
+        super().__init__(Posicion(0,0))
+        self.listaCuadros = []
 
     def agregarCuadros(self, cuadro):
-        if isinstance(cuadro, Camino):
-             self.dictCuadros['camino'].append(cuadro)
-        elif isinstance(cuadro, Estacion):
-             self.dictCuadros['estaciones'].append(cuadro)
-        elif isinstance(cuadro, Personaje):
-             self.dictCuadros['personaje'] = cuadro
-        elif isinstance(cuadro, Fondo):
-             self.dictCuadros['fondo'] = cuadro
-        elif isinstance(cuadro, Mensaje):
-            self.dictCuadros['mensaje'].append(cuadro)
-        elif isinstance(cuadro, Marcador):
-            self.dictCuadros['marcador'] = cuadro
+        self.listaCuadros.append(cuadro)
 
-    def accederLista(self):
-        return self.dictCuadros
+    def dibujar(self):
+        pass
 
-    def dibujar(self,ventana):
-        self.dictCuadros['fondo'].dibujar(ventana)
-        for camino in self.dictCuadros['camino']:
-            camino.dibujar(ventana)
-        for estacion in self.dictCuadros['estaciones']:
-            estacion.dibujar(ventana)
-        self.dictCuadros['personaje'].dibujar(ventana)
-        self.dictCuadros['marcador'].dibujar(ventana)
-        for mensaje in self.dictCuadros['mensaje']:
-            mensaje.dibujar(ventana)
-        pygame.display.update()
+    def mover(self):
+        pass
 
-    def mover(self, solapamiento):
-        self.dictCuadros['fondo'].mover()
-        for camino in self.dictCuadros['camino']:
-            camino.mover()
-        for estacion in self.dictCuadros['estaciones']:
-            estacion.mover()
-        self.dictCuadros['personaje'].mover(s.dim_Cuadro, solapamiento)
 
 class Estacion(Cuadro):
     def __init__(self, imagen, posicion, nombreEstacion):
-        self._Cuadro__posicion = posicion
+        super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
         self.nombre = nombreEstacion
 
@@ -138,9 +95,10 @@ class Estacion(Cuadro):
     def obtenerPosicion(self):
         return self.posicion.getPosicion()
 
+
 class Camino(Cuadro):
     def __init__(self, imagen, posicion):
-        self._Cuadro__posicion = posicion
+        super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
@@ -154,10 +112,11 @@ class Camino(Cuadro):
 
 class Mensaje(Cuadro):
     def __init__(self, imagen, nombre):
-        self._Cuadro__posicion = Posicion(175,120)
+        super().__init__(Posicion(175,120))
         self.imagen = pygame.image.load(imagen)
         self.nombre = nombre
         self.aparecer = False
+        self.fachadaJuegos = FachadaJuegos()
 
     def dibujar(self, ventana):
         if self.aparecer:
@@ -180,32 +139,25 @@ class Mensaje(Cuadro):
             keys = Listener.detectar()
             juego = None
             if keys[pygame.K_RETURN] and self.nombre != 'inicio':
+                self.aparecer = False
                 pygame.quit()
-                if self.nombre == 'laberinto':
-                    juego = Laberinto()
-                if self.nombre == 'puzzle':
-                    juego = Puzzle()
-                if self.nombre == 'ruta':
-                    juego = Ruta()
-                if self.nombre == 'snake':
-                    juego = Snake()
-                if self.nombre == 'virus':
-                    juego = EvitandoVirus()
-                juego.iniciarJuego()
+                self.fachadaJuegos.arrancarJuego(self.nombre)
             elif keys[pygame.K_ESCAPE]:
                 self.aparecer = False
 
 class Marcador(Cuadro):
 
-    def __init__(self, imagen, posicion, puntaje):
-        self._Cuadro__posicion = posicion
+    def __init__(self, imagen, posicion, puntos):
+        super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
-        self.puntaje = puntaje
+        with open(puntos) as p:
+            for line in p:
+                self.puntaje = int(line.strip())
 
     def dibujar(self, ventana):
         ventana.blit(self.imagen, self.posicion.getPosicion())
         fuente = pygame.font.SysFont('Arial', 25)
-        texto_puntaje = fuente.render(f'Puntaje: {self.puntaje.getAcumulador()}', 0, (255, 255, 255))
+        texto_puntaje = fuente.render(f'Puntaje: {self.puntaje}', 0, (255, 255, 255))
         ventana.blit(texto_puntaje, (self.posicion.getPosicion()[0] + 65, self.posicion.getPosicion()[1] + 10))
 
     def mover(self):
