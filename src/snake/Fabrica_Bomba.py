@@ -1,5 +1,5 @@
-from Fabrica_Malware import Fabrica_Malware
-from Figura_Bomba import Figura_Bomba
+from .Fabrica_Malware import Fabrica_Malware
+from .Figura_Bomba import Figura_Bomba
 
 class Fabrica_Bomba(Fabrica_Malware):
 

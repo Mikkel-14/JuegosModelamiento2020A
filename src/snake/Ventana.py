@@ -1,4 +1,4 @@
-from Mapa import Mapa
+from .Mapa import Mapa
 #from Marcador import Marcador
 import pygame
 import sys

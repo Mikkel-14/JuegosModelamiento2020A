@@ -1,13 +1,13 @@
 import pygame
-from Colision import Colision
-from Fabrica_Troyano import Fabrica_Troyano
-from Fabrica_Spyware import Fabrica_Spyware
-from Fabrica_Bomba import Fabrica_Bomba
+from .Colision import Colision
+from .Fabrica_Troyano import Fabrica_Troyano
+from .Fabrica_Spyware import Fabrica_Spyware
+from .Fabrica_Bomba import Fabrica_Bomba
 from random import randint
-from Cabeza import Cabeza
-from Cabeza2 import Cabeza2
-from Cola import Cola
-from Cola2 import Cola2
+from .Cabeza import Cabeza
+from .Cabeza2 import Cabeza2
+from .Cola import Cola
+from .Cola2 import Cola2
 
 class Mapa(object):
 

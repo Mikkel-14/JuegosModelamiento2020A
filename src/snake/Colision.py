@@ -1,5 +1,5 @@
-from Segmento_Cuerpo import Segmento_Cuerpo
-from Segmento_Cuerpo2 import Segmento_Cuerpo2
+from .Segmento_Cuerpo import Segmento_Cuerpo
+from .Segmento_Cuerpo2 import Segmento_Cuerpo2
 class Colision(object):
     def colisionarCabezaMalware(self,posCabeza,posMalware):
         if posCabeza==posMalware:

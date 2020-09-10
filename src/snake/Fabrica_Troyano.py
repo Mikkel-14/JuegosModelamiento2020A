@@ -1,5 +1,5 @@
-from Fabrica_Malware import Fabrica_Malware
-from Figura_Troyano import Figura_Troyano
+from .Fabrica_Malware import Fabrica_Malware
+from .Figura_Troyano import Figura_Troyano
 
 class Fabrica_Troyano(Fabrica_Malware):  
 

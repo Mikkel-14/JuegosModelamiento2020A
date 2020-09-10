@@ -1,14 +1,15 @@
-from Ventana import *
+from .Ventana import *
 import pygame
-from Control_Movimiento import *
-from Mensaje import *
-from Marcador import *
+from .Control_Movimiento import *
+from .Mensaje import *
+from .Marcador import *
+
 
 class Snake(object):
 
     def __init__(self):
         self.ventana=None
-        self.velocidad=10
+        self.velocidad=5
 
     def iniciarJuego(self):
         pygame.init()
@@ -154,5 +155,4 @@ class Snake(object):
         for i in range(tam):
             cola2.quitarUltimo()
 
-juegoSnake=Snake()
-juegoSnake.iniciarJuego()
+

@@ -1,7 +1,7 @@
-from ICabeza import ICabeza
+from .ICabeza import ICabeza
 import pygame
 import os.path
-from Control_Movimiento import Control_Movimiento
+from .Control_Movimiento import Control_Movimiento
 
 pygame.init()
 

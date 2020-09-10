@@ -1,7 +1,7 @@
 import pygame
 import os
 import sys
-from ISegmento import ISegmento
+from .ISegmento import ISegmento
 
 segmento = pygame.image.load(os.path.join(os.path.dirname(__file__), "img/segmentoCola.png"))
 

@@ -1,5 +1,5 @@
-from Fabrica_Malware import Fabrica_Malware
-from Figura_Spyware import Figura_Spyware
+from .Fabrica_Malware import Fabrica_Malware
+from .Figura_Spyware import Figura_Spyware
 
 class Fabrica_Spyware(Fabrica_Malware):
 

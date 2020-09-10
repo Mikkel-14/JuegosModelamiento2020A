@@ -1,5 +1,5 @@
-from Segmento_Cuerpo2 import Segmento_Cuerpo2
-from ICola import ICola
+from .Segmento_Cuerpo2 import Segmento_Cuerpo2
+from .ICola import ICola
 
 
 class Cola2(ICola):
