@@ -16,7 +16,8 @@ tamañoFigVida = int(ancho*0.18), int(alto*0.07)
 tamañoOpcion = int(ancho*0.1), int(alto*0.15)
 tamañoMarcador = int(ancho*0.18), int(alto*0.07)
 tamañoObstaculo = int(ancho*0.1), int(alto*0.14)
-tamañoLetraPuntaje = int(alto*0.025)
+tamañoLetraPuntaje = int(anchoScreenPC*10/756)
+
 
 #Coordenadas de Posicion de Botones GUI
 coordenadaBotonJugar = (ancho*0.7, alto*0.75)

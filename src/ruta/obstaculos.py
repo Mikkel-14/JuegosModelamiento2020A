@@ -1,6 +1,6 @@
 #=============================================================================================
 #                               JUEGO RUTA MAYA - Version 0.9
-#                Interfaz Obstáculo y clases ObstáculoA, ObstáculoB y ObstáculoC 
+#                Interfaz Obstáculo y clases Virus, ArañaGigante y MailInfectado 
 # Implementado por: Alejandro Llanganate, Anderson Cárdenas, Henrry Cordovillo y David Moreno
 #=============================================================================================
 
@@ -22,7 +22,7 @@ class Obstaculo(ABC):
         pass
 
 
-class ObstaculoA(Obstaculo):
+class Virus(Obstaculo):
     def __init__(self):
         self.imagen = pygame.image.load(obtenerPathAbsoluto('img/obs1.png', __file__))
         self.imagen = pygame.transform.scale(self.imagen, settings["tamañoObstaculo"])
@@ -43,7 +43,7 @@ class ObstaculoA(Obstaculo):
             self.posicion.actualizarX(randint(int(settings["limiteMinObstaculoX"]), int(settings["limiteMaxObstaculoX"]))) # y con un valor aleatorio en x
 
 
-class ObstaculoB(Obstaculo):
+class ArañaGigante(Obstaculo):
     def __init__(self):
         self.imagen = pygame.image.load(obtenerPathAbsoluto('img/obs2.png', __file__)).convert_alpha()
         self.imagen = pygame.transform.scale(self.imagen, settings["tamañoObstaculo"])
@@ -61,7 +61,7 @@ class ObstaculoB(Obstaculo):
             self.posicion.actualizarX(randint(int(settings["limiteMinObstaculoX"]), int(settings["limiteMaxObstaculoX"]))) # y con un valor aleatorio en x
 
 
-class ObstaculoC(Obstaculo):
+class MailInfectado(Obstaculo):
     def __init__(self):
         self.imagen = pygame.image.load(obtenerPathAbsoluto('img/obs3.png', __file__))
         self.imagen = pygame.transform.scale(self.imagen, settings["tamañoObstaculo"])

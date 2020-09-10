@@ -122,37 +122,39 @@ class Fondo(Figura):
         pass
 
 class FiguraOpcion(Figura):
-    def __init__(self, imagen, posicion, letraAsociada, solapamiento):
+    def __init__(self, imagen, posicion, letraAsociada):
         self.imagen = pygame.image.load(obtenerPathAbsoluto(imagen, __file__))
         self.imagen = pygame.transform.scale(self.imagen, settings["tamañoOpcion"])
         super().__init__(posicion)
         self.letraAsociada = letraAsociada
-        self.solapamiento = solapamiento
+        self.solapamiento = None
         self.visibilidad = False
 
     def dibujar(self, ventana):
         if(self.visibilidad == True):
             ventana.blit(self.imagen, self.posicion.obtenerCoordenadas())
-        self.notificar()
+            self.notificar()
+        elif(self.visibilidad == False):
+            self.notificar()
 
     def mover(self):
         pass
+
+    def añadirObservador(self, observador):
+        self.solapamiento = observador
 
     def setVisibilidad(self, esVisible):
         self.visibilidad = esVisible
 
     # NOTE: notificar() del patrón observador entre FiguraOpción y SolapamientoConOpción
     def notificar(self): 
-        self.solapamiento.actualizar(self.visibilidad, self.posicion.obtenerCoordenadas(), self.getLetraAsociada())
+        self.solapamiento.actualizar()
 
-    def getLetraAsociada(self):
-        return self.letraAsociada
+    def obtenerDatos(self):
+        return(self.visibilidad, self.posicion.obtenerCoordenadas(), self.letraAsociada)
 
     def obtenerVisibilidad(self):
         return self.visibilidad
-    
-    def obtenerCoordenadas(self):
-        self.posicion.obtenerCoordenadas()
 
 class Camino(Figura):
 

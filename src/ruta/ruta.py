@@ -1,5 +1,6 @@
 #=============================================================================================
 #                               JUEGO RUTA MAYA - Version 0.9
+#                                         Clase Ruta
 # Implementado por: Alejandro Llanganate, Anderson Cárdenas, Henrry Cordovillo y David Moreno
 #=============================================================================================
 import pygame
@@ -64,7 +65,7 @@ class Ruta():
         mensajeGanaste.agregarBoton(btnVolverAtras)
         mensajeGanaste.agregarBoton(btnVolverJugar)
         
-        puntaje = Puntaje(4, 1000)
+        puntaje = Puntaje(4, 0)
         
         pregunta1 = AudioPregunta('sounds/pregunta1.wav', "C")
         pregunta2 = AudioPregunta('sounds/pregunta2.wav', "B")
@@ -87,9 +88,18 @@ class Ruta():
         solapamientosConOpcion = [solapamientoOpcionA, solapamientoOpcionB, solapamientoOpcionC]
         solapamientoConObstaculo = SolapamientoConObstaculo(verificacion, camino)
 
-        opcionA = FiguraOpcion('img/botonA.png', Posicion(settings["coordenadaOpcion"][0]), "A", solapamientoOpcionA)
-        opcionB = FiguraOpcion('img/botonB.png', Posicion(settings["coordenadaOpcion"][1]), "B", solapamientoOpcionB)
-        opcionC = FiguraOpcion('img/botonC.png', Posicion(settings["coordenadaOpcion"][2]), "C", solapamientoOpcionC)
+        opcionA = FiguraOpcion('img/botonA.png', Posicion(settings["coordenadaOpcion"][0]), "A")
+        opcionA.añadirObservador(solapamientoOpcionA)
+        
+        opcionB = FiguraOpcion('img/botonB.png', Posicion(settings["coordenadaOpcion"][1]), "B")
+        opcionB.añadirObservador(solapamientoOpcionB)
+        
+        opcionC = FiguraOpcion('img/botonC.png', Posicion(settings["coordenadaOpcion"][2]), "C")
+        opcionC.añadirObservador(solapamientoOpcionC)
+
+        solapamientoOpcionA.añadirOpcionObservada(opcionA)
+        solapamientoOpcionB.añadirOpcionObservada(opcionB)
+        solapamientoOpcionC.añadirOpcionObservada(opcionC)        
 
         self.mapa.agregarFigura(Fondo('img/fondoJuego.png', Posicion(settings["coordenadaFondo"])))        
         self.mapa.agregarFigura(camino)

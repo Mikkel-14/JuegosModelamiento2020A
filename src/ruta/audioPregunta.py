@@ -1,6 +1,6 @@
 #=============================================================================================
 #                               JUEGO RUTA MAYA - Version 0.9
-#                           Clase AudioPregunta y Clase Playlist
+#                                     Clase AudioPregunta 
 # Implementado por: Alejandro Llanganate, Anderson Cárdenas, Henrry Cordovillo y David Moreno
 #=============================================================================================
 
