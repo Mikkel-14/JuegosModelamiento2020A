@@ -78,8 +78,6 @@ class Snake(object):
                 if run[0] or run[2]:
                     marcador.calcularPuntuacion(malware.obtenerValor())
                     malware = mapa.obtenerMalware()
-                    #self.modificarPuntuacion(malware.obtenerValor())
-                    #añada un segmentpo de cola
                     self.ventana.dibujarFondo(pantalla)
                     malware.dibujar(pantalla)
                     mapa.dibujarMapa(pantalla)
