@@ -19,7 +19,7 @@ mensajePerder = pygame.transform.scale(mensajePerder, (1000, 500))
 
 
 
-NIVEL = 0
+NIVEL = 1
 N = NIVEL + 2
 DIM = int(420 / N)
 DIMENSION = 1000, 500  # Se define las dimensiones de la ventana del juego
@@ -28,7 +28,8 @@ DIMENSION = 1000, 500  # Se define las dimensiones de la ventana del juego
 class Listener:
     @staticmethod
     def detectar() -> tuple:
-        return pygame.key.get_pressed() 
+        return pygame.key.get_pressed()
+
 
 class Posicion:
     def __init__(self, x, y):
@@ -53,7 +54,7 @@ class Posicion:
     def actualizarCoordenadas(self, x, y):
         self.x = x
         self.y = y
-        
+
 class Mensaje(object):
 
     def __init__(self):
@@ -79,7 +80,7 @@ class Mensaje(object):
 class Cuadro(ABC):
     def __init__(self, posicionRef, posicionAct):
         self.posicionReferencial = posicionRef
-        self.posicionActual=posicionAct
+        self.posicionActual = posicionAct
         super().__init__()
 
     @property
@@ -141,6 +142,7 @@ class CuadroVacio(Cuadro):
 
     def setPosicionActual(self, posicion):
         self._Cuadro__posicionActual = Posicion(posicion[0], posicion[1])
+
 
 
 class FragmentoImagen(Cuadro):
@@ -234,9 +236,11 @@ class Contador:
 
     def aumentar(self):
         self.numeroMovimientos += 1
-       
+        print(self.numeroMovimientos)
+        
+
     def verificar(self, fragmento):
-        if (self.numeroMovimientos % 10 == 0) & (self.numeroMovimientos >= 1) & isinstance(fragmento,FragmentoImagen):
+        if (self.numeroMovimientos % 5 == 0) & (self.numeroMovimientos >= 1) & isinstance(fragmento,FragmentoImagen):
             fragmento.ocultar()
 
 
@@ -264,14 +268,15 @@ class Verificacion:
                     contP += 1
         if contP == len(listafragmentos)-1:
             self.puntaje.calcularPuntaje(False)
-            
+
+
         for elemento in listafragmentos:
             if (elemento.getPosicionActual()==elemento.getPosicionRef()):
                 contG += 1
 
         if contG == len(listafragmentos):
             self.puntaje.calcularPuntaje(True)
-            
+
 
 class Puntaje:
 
@@ -286,6 +291,9 @@ class Puntaje:
 
         else:
             self.puntajeFinal = -1
+
+
+
 
 class Puzzle:
 
@@ -398,7 +406,6 @@ class Puzzle:
                     elif puntaje.puntajeFinal == -1:
                         #ctypes.windll.user32.MessageBoxW(0, "TU PUNTAJE OBTENIDO FUE:" + str(puntaje.puntajeFinal)
                         #                                , "FELICIDADES GANASTE!!", 1)
-                        print("zzzzzzzzz")
                         mensaje.cambiarEstado((False,False,True))
                         mensaje.dibujar(pantalla_juego)
                         pygame.display.update()
