@@ -30,9 +30,6 @@ class Posicion:
     def setX(self, x):
         self.x = x
 
-    def setY(self, y):
-        self.y = y
-
 
 class Cuadro(ABC):
     def __init__(self, posicionRef, posicionAct):
