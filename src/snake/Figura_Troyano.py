@@ -1,4 +1,4 @@
-from snake.Figura import Figura
+from .Figura import Figura
 
 import pygame
 import os
@@ -9,7 +9,7 @@ troyanoIMG = pygame.transform.scale(troyanoIMG, (64, 64))
 class Figura_Troyano(Figura):
 
     def __init__(self, x, y):
-        self.valor = 150
+        self.valor = 60
         self.posX = x
         self.posY = y
         self.imagen = troyanoIMG

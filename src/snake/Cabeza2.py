@@ -5,18 +5,18 @@ from .Control_Movimiento import Control_Movimiento
 
 pygame.init()
 
-mov_izquierda = pygame.image.load(os.path.join(os.path.dirname(__file__), "img/L1.png"))
-mov_derecha = pygame.image.load(os.path.join(os.path.dirname(__file__), "img/R1.png"))
-mov_arriba = pygame.image.load(os.path.join(os.path.dirname(__file__), "img/U1.png"))
-mov_abajo = pygame.image.load(os.path.join(os.path.dirname(__file__), "img/D1.png"))
+mov_izquierda = pygame.image.load(os.path.join(os.path.dirname(__file__), "img/L12.png"))
+mov_derecha = pygame.image.load(os.path.join(os.path.dirname(__file__), "img/R12.png"))
+mov_arriba = pygame.image.load(os.path.join(os.path.dirname(__file__), "img/U12.png"))
+mov_abajo = pygame.image.load(os.path.join(os.path.dirname(__file__), "img/D12.png"))
 
-class Cabeza(ICabeza):  
+class Cabeza2(ICabeza):
     def __init__(self, x, y, ancho, alto):
         self.x = x
         self.y = y
         self.ancho = ancho
         self.alto = alto
-        self.vel = 64   
+        self.vel = 64
         self.izquierda = False
         self.derecha = False
         self.arriba = False
@@ -28,16 +28,16 @@ class Cabeza(ICabeza):
             ventana.blit(mov_izquierda, (self.x,self.y))
         elif self.derecha:
             ventana.blit(mov_derecha, (self.x,self.y))
-        elif self.arriba:
-            ventana.blit(mov_arriba, (self.x,self.y))
-        else:
+        elif self.abajo:
             ventana.blit(mov_abajo, (self.x,self.y))
+        else:
+            ventana.blit(mov_arriba, (self.x,self.y))
 
     def mover(self,limiteVentanaX,limiteVentanaY):
 
         keys = Control_Movimiento.detectarMovimiento()
 
-        if keys[pygame.K_a] and self.x >= 0 and not self.derecha:
+        if keys[pygame.K_LEFT] and self.x >= 0 and not self.derecha:
 
             self.x -= self.vel
             self.izquierda = True
@@ -45,7 +45,7 @@ class Cabeza(ICabeza):
             self.arriba = False
             self.abajo = False
 
-        elif keys[pygame.K_d] and self.x <= limiteVentanaX-self.ancho  and not self.izquierda:
+        elif keys[pygame.K_RIGHT] and self.x <= limiteVentanaX-self.ancho  and not self.izquierda:
 
             self.x += self.vel
             self.izquierda = False
@@ -53,7 +53,7 @@ class Cabeza(ICabeza):
             self.arriba = False
             self.abajo = False
 
-        elif keys[pygame.K_w] and self.y >= 0  and not self.abajo:
+        elif keys[pygame.K_UP] and self.y >= 0  and not self.abajo:
 
             self.y -= self.vel
             self.izquierda = False
@@ -61,7 +61,7 @@ class Cabeza(ICabeza):
             self.arriba = True
             self.abajo = False
 
-        elif keys[pygame.K_s] and self.y <= limiteVentanaY-self.alto  and not self.arriba:
+        elif keys[pygame.K_DOWN] and self.y <= limiteVentanaY-self.alto  and not self.arriba:
             self.y += self.vel
             self.izquierda = False
             self.derecha = False
@@ -89,8 +89,8 @@ class Cabeza(ICabeza):
         self.y=y
         self.izquierda = False
         self.derecha = False
-        self.arriba = False
-        self.abajo = True
+        self.arriba = True
+        self.abajo = False
 
     def retornarPosicion(self,limiteVentanaX,limiteVentanaY):
         if self.x<0:

@@ -1,4 +1,4 @@
-from snake.Figura import Figura
+from .Figura import Figura
 
 import pygame
 import os
@@ -9,7 +9,7 @@ spywareIMG = pygame.transform.scale(spywareIMG, (64, 64))
 class Figura_Spyware(Figura):
 
     def __init__(self, x, y):
-        self.valor = 100
+        self.valor = 70
         self.posX = x
         self.posY = y
         self.imagen = spywareIMG

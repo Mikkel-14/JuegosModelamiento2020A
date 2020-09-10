@@ -3,9 +3,9 @@ import os
 import sys
 from .ISegmento import ISegmento
 
-segmento = pygame.image.load(os.path.join(os.path.dirname(__file__), "img/segmentoCola.png"))
+segmento = pygame.image.load(os.path.join(os.path.dirname(__file__), "img/segmentoCola2.png"))
 
-class Segmento_Cuerpo(ISegmento):
+class Segmento_Cuerpo2(ISegmento):
 
     def __init__(self,x,y):
         self.posX = x
