@@ -4,15 +4,12 @@ from pygame.locals import *
 from abc import ABC, abstractmethod
 from laberinto.posicionLaberinto import *
 from laberinto.listenerLaberinto import *
+from laberinto.observadorLaberinto import *
 
 class CuadroLaberinto(ABC):
     def __init__(self, posicion):
         self.posicion = posicion
         super().__init__()
-
-    @property
-    def posicion(self):
-        return self.__posicion
 
     @abstractmethod
     def dibujar(self):
@@ -25,7 +22,7 @@ class CuadroLaberinto(ABC):
 
 class FondoLaberinto(CuadroLaberinto):
     def __init__(self, imagen, posicion):
-        self._CuadroLaberinto__posicion = posicion
+        super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
@@ -40,7 +37,7 @@ class FondoLaberinto(CuadroLaberinto):
 
 class PersonajeLaberinto(CuadroLaberinto):
     def __init__(self, imagen, posicion):
-        self._CuadroLaberinto__posicion = posicion
+        super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
         self.numeroVidas = s.maximo_de_vidas
 
@@ -65,9 +62,40 @@ class PersonajeLaberinto(CuadroLaberinto):
             pygame.time.delay(150)
 
 
+class EnemigoLaberinto(CuadroLaberinto, ObservadorLaberinto):
+    def __init__(self, imagen, posicion):
+        super().__init__(posicion)
+        self.imagen = pygame.image.load(imagen)
+
+    def dibujar(self, ventana):
+        (x, y) = (self.posicion.x, self.posicion.y)
+        ventana.blit(pygame.transform.scale(self.imagen, (s.dim_Cuadro, s.dim_Cuadro)), (x, y))
+
+    def mover(self, dr, sl):
+        keys = ListenerLaberinto.detectar()
+        (x, y) = (self.posicion.x, self.posicion.y)
+        if keys[pygame.K_w] and sl.verificar(self, (x, y - dr)):
+            self.posicion.actualizarY(y - dr)
+            pygame.time.delay(150)
+        if keys[pygame.K_s] and sl.verificar(self, (x, y + dr)):
+            self.posicion.actualizarY(y + dr)
+            pygame.time.delay(150)
+        if keys[pygame.K_a] and sl.verificar(self, (x - dr, y)):
+            self.posicion.actualizarX(x - dr)
+            pygame.time.delay(150)
+        if keys[pygame.K_d] and sl.verificar(self, (x + dr, y)):
+            self.posicion.actualizarX(x + dr)
+            pygame.time.delay(150)
+
+    def actualizar(self, virus, enemigo, meta, perdida, corazon):
+        if enemigo:
+            self.posicion.actualizarX(s.posInicial_Enemigo[0])
+            self.posicion.actualizarY(s.posInicial_Enemigo[1])
+            
+
 class CaminoLaberinto(CuadroLaberinto):
     def __init__(self, imagen, posicion):
-        self._CuadroLaberinto__posicion = posicion
+        super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
@@ -80,7 +108,7 @@ class CaminoLaberinto(CuadroLaberinto):
 
 class VirusLaberinto(CuadroLaberinto):
     def __init__(self, imagen, posicion):
-        self._CuadroLaberinto__posicion = posicion
+        super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
@@ -93,7 +121,7 @@ class VirusLaberinto(CuadroLaberinto):
 
 class MetaLaberinto(CuadroLaberinto):
     def __init__(self, imagen, posicion):
-        self._CuadroLaberinto__posicion = posicion
+        super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, ventana):
@@ -105,7 +133,7 @@ class MetaLaberinto(CuadroLaberinto):
 
 class MensajeLaberinto(CuadroLaberinto):
     def __init__(self, imagen, nombre):
-        self._CuadroLaberinto__posicion = PosicionLaberinto(0, 0)
+        super().__init__(PosicionLaberinto(0, 0))
         self.imagen = pygame.image.load(imagen)
         self.nombre = nombre
         self.aparecer = False
@@ -129,7 +157,7 @@ class MensajeLaberinto(CuadroLaberinto):
 
 class TableroLaberinto(CuadroLaberinto):
     def __init__(self):
-        self._CuadroLaberinto__posicion = PosicionLaberinto(0,0)
+        super().__init__(PosicionLaberinto(0, 0))
         self.dictCuadros = dict()
         self.dictCuadros['camino'] = list()
         self.dictCuadros['virus'] = list()
@@ -164,7 +192,7 @@ class TableroLaberinto(CuadroLaberinto):
 
 class VidaLaberinto(CuadroLaberinto):
     def __init__(self, imagen1, imagen2, posicion):
-        self._CuadroLaberinto__posicion = posicion
+        super().__init__(posicion)
         self.imagenes = [pygame.image.load(imagen1), pygame.image.load(imagen2)]
         self.lleno = 1
 
