@@ -1,12 +1,14 @@
 import pygame
 import laberinto.settingsLaberinto as s
 from laberinto.ventanaLaberinto import *
+from laberinto.cuadrosLaberinto import *
 pygame.init()
 s.init()
 import os
 import sys
 
 bandera = True
+PUNTOS_PATH = obtenerPathAbsoluto('assets/puntos.dat')
 
 class Laberinto():
     def __init__(self):
@@ -15,27 +17,18 @@ class Laberinto():
     def iniciarJuego(self):
         self.ventana = VentanaLaberinto()
         self.ventana.cargarTablero()
-        MOSTRAR_INSTRUCCIONES = True
         bandera = True
 
         while bandera:
             self.ventana.reloj.tick(s.FPS)
-            manejo = self.ventana.manejarMensajes(MOSTRAR_INSTRUCCIONES, self)
+            manejo = self.ventana.manejarMensajes(self)
 
             try:
                 if manejo and bandera:
-                    self.ventana.tablero.dictCuadros['personaje'].mover(s.velocidad, self.ventana.solapamiento)
-                    self.ventana.tablero.dictCuadros['fondo'].dibujar(self.ventana.win)
-                    for camino in self.ventana.tablero.dictCuadros['camino']:
-                        camino.dibujar(self.ventana.win)
-                    for virus in self.ventana.tablero.dictCuadros['virus']:
-                        virus.dibujar(self.ventana.win)
-                    self.ventana.tablero.dictCuadros['meta'].dibujar(self.ventana.win)
-                    self.ventana.tablero.dictCuadros['personaje'].dibujar(self.ventana.win)
-                    for vida in self.ventana.tablero.dictCuadros['vidas']:
-                        vida.dibujar(self.ventana.win)
-                    for mensaje in self.ventana.tablero.dictCuadros['mensaje']:
-                        mensaje.dibujar(self.ventana.win)
+                    for cuadro in self.ventana.tablero.listaCuadros:
+                        if isinstance(cuadro, PersonajeLaberinto) or isinstance(cuadro, EnemigoLaberinto):
+                            cuadro.mover(s.velocidad, self.ventana.solapamiento)
+                        cuadro.dibujar(self.ventana.win)
                     pygame.display.update()
 
                 for event in pygame.event.get():
@@ -55,3 +48,10 @@ class Laberinto():
     def salirJuego(self):
         bandera = False
         pygame.quit()
+        with open(PUNTOS_PATH) as f:
+            for lines in f:
+                dato = int(lines.strip())
+        dato += self.ventana.puntuacion.puntos
+        arch = open(PUNTOS_PATH,'w')
+        arch.write(str(dato))
+        arch.close()
