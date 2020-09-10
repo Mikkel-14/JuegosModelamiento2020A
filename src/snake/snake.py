@@ -69,6 +69,16 @@ class Snake(object):
                 clock.tick(self.velocidad)
                 for event in pygame.event.get():
                         if event.type == pygame.QUIT:
+                            pathAbsolutoScript = os.path.dirname(file)
+                            pathAbsoluto = os.path.join(pathAbsolutoScript,"../assets/puntos.dat" )
+                            with open (pathAbsoluto) as f: 
+                                for lines in f:
+                                    dato = int(lines.strip())
+                            dato += self.marcador.puntuacion
+                            print (dato)
+                            arch = open(PUNTOS_PATH,'w')
+                            arch.write(str(dato))
+                            arch.close()
                             exit()
                 cabeza.mover(limiteVentanaX,limiteVentanaY)
                 cabeza2.mover(limiteVentanaX,limiteVentanaY)
@@ -115,6 +125,16 @@ class Snake(object):
             while True:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
+                        pathAbsolutoScript = os.path.dirname(file)
+                        pathAbsoluto = os.path.join(pathAbsolutoScript,"../assets/puntos.dat" )
+                        with open (pathAbsoluto) as f: 
+                            for lines in f:
+                                dato = int(lines.strip())
+                        dato += self.marcador.puntuacion
+                        print (dato)
+                        arch = open(PUNTOS_PATH,'w')
+                        arch.write(str(dato))
+                        arch.close()
                         exit()
                 keys = Control_Movimiento.detectarMovimiento()
                 if keys[pygame.K_ESCAPE]:
