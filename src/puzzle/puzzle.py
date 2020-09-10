@@ -64,9 +64,9 @@ class Cuadro(ABC):
 
 class CuadroVacio(Cuadro):
 
-    def __init__(self, posicionR, imagen, posicionA):
+    def __init__(self, posicionR, imagen):
         self._Cuadro__posicionReferencial = posicionR
-        self._Cuadro__posicionActual = posicionA
+        self._Cuadro__posicionActual = None
         self.imagen = pygame.image.load(imagen)
 
     def dibujar(self, fondo):
@@ -74,7 +74,7 @@ class CuadroVacio(Cuadro):
         fondo.blit(pygame.transform.scale(self.imagen, dimension),
                    (self.posicionActual.getX(), self.posicionActual.getY()))
 
-    def mover(self, colision):
+    def iniciarMovimiento(self, colision):
         keys = Listener.detectar()
         x = self.posicionActual.getX()
         y = self.posicionActual.getY()
@@ -87,6 +87,23 @@ class CuadroVacio(Cuadro):
             colision.verificarColision((x, y + DIM))
         if keys[pygame.K_DOWN]:
             colision.verificarColision((x, y - DIM))
+
+    def mover(self, pos):
+        self.posicionActual.setX(pos[0])
+        self.posicionActual.setY(pos[1])
+
+    def getPosicionActual(self):
+        x = self.posicionActual.getX()
+        y = self.posicionActual.getY()
+        return x, y
+
+    def getPosicionRef(self):
+        x = self.posicionReferencial.getX()
+        y = self.posicionReferencial.getY()
+        return x, y
+
+    def setPosicionActual(self, posicion):
+        self._Cuadro__posicionActual = Posicion(posicion[0], posicion[1])
 
 
 class FragmentoImagen(Cuadro):
