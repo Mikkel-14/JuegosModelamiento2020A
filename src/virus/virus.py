@@ -1,12 +1,16 @@
 import pygame
 import os
 import sys
-from virus.cuadro import *
-from virus.posicion import *
-
+from .cuadro import *
+from .solapamiento import *
+from .posicion import *
+from .listener import *
+from .puntuacion import *
+from .herramientas import *
 
 # NOTE: dado que las dimensiones de este juego son 600 x 550, se consideraran 24 columnas y 22 filas
 # NOTE: las dimensiones de cada imagen que interactuara con el juego son de 25px por 25px
+
 class EvitandoVirus():
 
     def __init__(self):
@@ -16,23 +20,27 @@ class EvitandoVirus():
         self.ventana = None
         self.clock = pygame.time.Clock()
         self.mapa = None
+        self.bandera = True
 
     def iniciarJuego(self):
         INSTRUCCIONES = True
-        FONTO_PATH = 'virus/img/Fondo.png'
-        OBJETIVO_PATH = 'virus/img/cuadroObjetivo.png'
-        WEB_PATH = 'virus/img/cuadroPagWeb.png'
-        INST_PATH = 'virus/img/inicioVirus.png'
-        PARED_PATH = 'virus/img/Pared.png'
-        CAMINO_PATH = 'virus/assets/matrizCamino.dat'
-        PAREDES = 'virus/assets/matrizPared.dat'
-        PERSONAJE_PATH = 'virus/img/personaje.png'
-        VIRUS_PATH = 'virus/img/cuadroVirus.png'
-        MENSAJES_PATH = 'virus/assets/mensajes.dat'
+        FONTO_PATH = obtenerPathAbsoluto('img/Fondo.png')
+        OBJETIVO_PATH = obtenerPathAbsoluto('img/cuadroObjetivo.png')
+        WEB_PATH = obtenerPathAbsoluto('img/cuadroPagWeb.png')
+        INST_PATH = obtenerPathAbsoluto('img/inicioVirus.png')
+        PARED_PATH = obtenerPathAbsoluto('img/Pared.png')
+        CAMINO_PATH = obtenerPathAbsoluto('assets/matrizCamino.dat')
+        PAREDES = obtenerPathAbsoluto('assets/matrizPared.dat')
+        PERSONAJE_PATH = obtenerPathAbsoluto('img/personaje.png')
+        HACKER_PATH = obtenerPathAbsoluto('img/hacker.png')
+        VIRUS_PATH = obtenerPathAbsoluto('img/cuadroVirus.png')
+        MENSAJES_PATH = obtenerPathAbsoluto('assets/mensajes.dat')
+        MK_PATH= obtenerPathAbsoluto('assets/s.ttf')
         self.ventana = pygame.display.set_mode(self.dimensiones)
         self.mapa = Mapa(FONTO_PATH)
         pygame.display.set_caption(self.titulo)
-
+        puntos = Puntuacion()
+        self.puntaje = puntos
         with open(PAREDES) as p:
             for line in p:
                 info = line.strip().split(',')
@@ -47,84 +55,100 @@ class EvitandoVirus():
                 y = int(info[1])*25
                 paginaWeb = CuadroPaginaWeb(WEB_PATH, VIRUS_PATH, Posicion(x,y))
                 self.mapa.agregarCuadros(paginaWeb)
+        objetivo = CuadroObjetivo(OBJETIVO_PATH, Posicion(18*25,15*25))
+        self.mapa.agregarCuadros(objetivo)
+        solapamiento = SolapamientoJugador(self.mapa, self)
+        solHacker = SolapamientoHacker(self.mapa, self)
+        keyMapBueno = (pygame.K_UP,pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT)
+        keyMapMalo = (pygame.K_w,pygame.K_s, pygame.K_a, pygame.K_d)
+        escuchador = Listener(keyMapBueno)
+        escuchadorHacker = Listener(keyMapMalo)
+        personaje = CuadroPersonaje(PERSONAJE_PATH, Posicion(18*25,5*25), solapamiento, escuchador, 'bueno')
+        hacker = CuadroPersonaje(HACKER_PATH, Posicion(19*25,15*25),solHacker,escuchadorHacker, 'malo')
+        mk = CuadroMarcador(Posicion(5,5),puntos,MK_PATH)
+        self.mapa.agregarCuadros(mk)
+        self.mapa.agregarCuadros(personaje)
+        self.mapa.agregarCuadros(hacker)
         with open(MENSAJES_PATH) as m:
             for line in m:
                 datos = line.strip().split(',')
                 mensaje = Mensaje(datos[0], datos[1], Posicion(0,0))
                 self.mapa.agregarCuadros(mensaje)
-        objetivo = CuadroObjetivo(OBJETIVO_PATH, Posicion(18*25,15*25))
-        self.mapa.agregarCuadros(objetivo)
-        solapamiento = Solapamiento(self.mapa, self)
-        personaje = CuadroPersonaje(PERSONAJE_PATH, Posicion(18*25,5*25), solapamiento)
-        self.mapa.agregarCuadros(personaje)
 
         self.mapa.dibujar(self.ventana)
-        objetivo.dibujar(self.ventana)
-        for camino in self.mapa.dictCuadros['cuadroPaginaWeb']:
-            camino.dibujar(self.ventana)
-        for pared in self.mapa.dictCuadros['cuadroPared']:
-            pared.dibujar(self.ventana)
-        personaje.dibujar(self.ventana)
-        bandera=True
-        while bandera:
+        for cuadros in self.mapa.listaCuadros:
+            cuadros.dibujar(self.ventana)
+
+        while self.bandera:
             self.clock.tick(30)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    bandera=False
+                    self.bandera=False
                     pygame.quit()
                     break
-            lstmsj = self.mapa.dictCuadros['mensaje']
-            msj = lstmsj[0]
-            for m in lstmsj:
-                if m.getNombre() == 'instrucciones' and INSTRUCCIONES:
-                    m.autorizarDibujo(True)
-                    INSTRUCCIONES = False
-                    break
-                if m.getAparecer():
-                    msj = m
+
+            for m in self.mapa.listaCuadros:
+                if isinstance(m, Mensaje):
+                    if m.getNombre() == 'instrucciones' and INSTRUCCIONES:
+                        m.autorizarDibujo(True)
+                        INSTRUCCIONES = False
+                    if m.getAparecer():
+                        msj = m
+
             try:
                 msj.esperar(self)
-            except:
+            except Exception:
                 break
 
             if not msj.getAparecer():
                 try:
-                    self.mapa.dictCuadros['personaje'].mover(25)
-                except:
+                    personaje.mover(25)
+                    hacker.mover(25)
+                except Exception:
                     break
-
             self.mapa.dibujar(self.ventana)
-            objetivo.dibujar(self.ventana)
-            for camino in self.mapa.dictCuadros['cuadroPaginaWeb']:
-                camino.dibujar(self.ventana)
-            for pared in self.mapa.dictCuadros['cuadroPared']:
-                pared.dibujar(self.ventana)
-            personaje.dibujar(self.ventana)
-            for mensaje in self.mapa.dictCuadros['mensaje']:
-                mensaje.dibujar(self.ventana)
+            for cuadros in self.mapa.listaCuadros:
+                cuadros.dibujar(self.ventana)
             pygame.display.update()
 
     def reiniciarJuego(self):
-        pygame.quit()
         self.iniciarJuego()
 
     def salirJuego(self):
+        self.bandera = False
         pygame.quit()
+        PUNTOS_PATH = obtenerPathAbsoluto('../assets/puntos.dat')
+        with open(PUNTOS_PATH) as f:
+            for lines in f:
+                dato = int(lines.strip())
+        dato += self.puntaje.obtenerPuntos()
+        arch = open(PUNTOS_PATH,'w')
+        arch.write(str(dato))
+        arch.close()
 
     def verificarCondiciones(self, tipoCuadroSolapado):
         """
         En base al tipo de cuadro solapado, determina si se gano o se perdio el juego
         """
         if tipoCuadroSolapado == 'objetivo':
-            for mensaje in self.mapa.dictCuadros['mensaje']:
-                if mensaje.getNombre() == 'victoria':
-                    mensaje.autorizarDibujo(True)
+            for mensaje in self.mapa.listaCuadros:
+                if isinstance(mensaje, Mensaje):
+                    if mensaje.getNombre() == 'victoria':
+                        mensaje.autorizarDibujo(True)
+                        self.puntaje.calcularPuntaje()
         elif tipoCuadroSolapado == 'virus':
-            for mensaje in self.mapa.dictCuadros['mensaje']:
-                if mensaje.getNombre() == 'fallo':
-                    mensaje.autorizarDibujo(True)
+            for mensaje in self.mapa.listaCuadros:
+                if isinstance(mensaje, Mensaje):
+                    if mensaje.getNombre() == 'fallo':
+                        mensaje.autorizarDibujo(True)
+        elif tipoCuadroSolapado == 'personaje':
+            for mensaje in self.mapa.listaCuadros:
+                if isinstance(mensaje, Mensaje):
+                    if mensaje.getNombre() == 'atrapado':
+                        mensaje.autorizarDibujo(True)
         else:
-            pass
+            self.puntaje.calcularPuntaje()
+
 
     def update(self, tipoCuadroSolapado):
         self.verificarCondiciones(tipoCuadroSolapado)
