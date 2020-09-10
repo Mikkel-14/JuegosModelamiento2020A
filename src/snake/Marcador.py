@@ -26,3 +26,6 @@ class Marcador(object):
 
     def obtenerVidas(self):
         return self.vidas
+
+    def obtenerPuntuacion(self):
+        return self.puntuacion

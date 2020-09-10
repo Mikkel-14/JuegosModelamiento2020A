@@ -4,24 +4,25 @@ from .Control_Movimiento import *
 from .Mensaje import *
 from .Marcador import *
 
-
 class Snake(object):
 
     def __init__(self):
         self.ventana=None
         self.velocidad=5
+        self.marcador= Marcador()
 
     def iniciarJuego(self):
         pygame.init()
         mensaje = Mensaje()
         self.ventana = Ventana()
         mapa = self.ventana.obtenerMapa()
-        cabeza = mapa.obtenerComponentes()[0]
-        cola = mapa.obtenerComponentes()[1]
-        cabeza2 = mapa.obtenerComponentes()[2]
-        cola2 = mapa.obtenerComponentes()[3]
         malware = mapa.obtenerMalware()
         pantalla = self.ventana.cargarPantalla()#pygame
+
+        def redibujarComponentes():
+            malware.dibujar(pantalla)
+            mapa.dibujarMapa(pantalla)
+            self.marcador.dibujar(pantalla)
 
         limiteVentanaX = self.ventana.obtenerLimites()[0]
         limiteVentanaY = self.ventana.obtenerLimites()[1]
@@ -31,38 +32,19 @@ class Snake(object):
         mensaje.estadoMensaje((True,False,False,False,False))
         mensaje.dibujar(pantalla)
         pygame.display.update()
-        while True:
-            keys = Control_Movimiento.detectarMovimiento()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    exit()
-            if keys[pygame.K_RETURN]:
-                break
+        Control_Movimiento.esperarTeclaEnter()
 
         mensaje.estadoMensaje((False,False,False,False,True))
         mensaje.dibujar(pantalla)
         pygame.display.update()
-        while True:
-            keys = Control_Movimiento.detectarMovimiento()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    exit()
-            if keys[pygame.K_SPACE]:
-                break
+        Control_Movimiento.esperarTeclaSpace()
 
         mensaje.estadoMensaje((False,False,False,True,False))
         mensaje.dibujar(pantalla)
         pygame.display.update()
-        while True:
-            keys = Control_Movimiento.detectarMovimiento()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    exit()
-            if keys[pygame.K_RETURN]:
-                break
+        Control_Movimiento.esperarTeclaEnter()
 
-        marcador= Marcador()
-        while bandera and marcador.obtenerVidas()>=0:
+        while bandera and self.marcador.obtenerVidas()>=0:
             clock.tick(self.velocidad)
             run = [False,False,False,False]
             while not run[1] and not run[3]:
@@ -76,51 +58,46 @@ class Snake(object):
                                     dato = int(lines.strip())
                             dato += self.marcador.puntuacion
                             print (dato)
-                            arch = open(PUNTOS_PATH,'w')
+                            arch = open(pathAbsoluto,'w')
                             arch.write(str(dato))
                             arch.close()
                             exit()
-                cabeza.mover(limiteVentanaX,limiteVentanaY)
-                cabeza2.mover(limiteVentanaX,limiteVentanaY)
+                mapa.cabeza.mover(limiteVentanaX,limiteVentanaY)
+                mapa.cabeza2.mover(limiteVentanaX,limiteVentanaY)
 
                 run = mapa.verificarElementosMapa(self.ventana.obtenerLimites(),malware.obtenerPosicion())
 
                 if run[0] or run[2]:
-                    marcador.calcularPuntuacion(malware.obtenerValor())
+                    self.marcador.calcularPuntuacion(malware.obtenerValor())
                     malware = mapa.obtenerMalware()
                     self.ventana.dibujarFondo(pantalla)
-                    malware.dibujar(pantalla)
-                    mapa.dibujarMapa(pantalla)
-                    marcador.dibujar(pantalla)
+                    redibujarComponentes()
                     if run[0]:
-                        cola.agregarSegmento(cabeza.obtenerPosicion())
-                        cola2.mover(cabeza2.obtenerPosicion())
+                        mapa.cola.agregarSegmento(mapa.cabeza.obtenerPosicion())
+                        mapa.cola2.mover(mapa.cabeza2.obtenerPosicion())
                     elif run[2]:
-                        cola2.agregarSegmento(cabeza2.obtenerPosicion())
-                        cola.mover(cabeza.obtenerPosicion())
+                        mapa.cola2.agregarSegmento(mapa.cabeza2.obtenerPosicion())
+                        mapa.cola.mover(mapa.cabeza.obtenerPosicion())
                 elif not (run[1] or run [3]):
                     self.ventana.dibujarFondo(pantalla)
-                    malware.dibujar(pantalla)
-                    mapa.dibujarMapa(pantalla)
-                    marcador.dibujar(pantalla)
-                    cola.mover(cabeza.obtenerPosicion())
-                    cola2.mover(cabeza2.obtenerPosicion())
+                    redibujarComponentes()
+                    mapa.cola.mover(mapa.cabeza.obtenerPosicion())
+                    mapa.cola2.mover(mapa.cabeza2.obtenerPosicion())
                 pygame.display.update()
-            marcador.quitarVida()
+            self.marcador.quitarVida()
             if run[1]:
-                cabeza.retornarPosicion(limiteVentanaX,limiteVentanaY)
+                mapa.cabeza.retornarPosicion(limiteVentanaX,limiteVentanaY)
             elif run[3]:
-                cabeza2.retornarPosicion(limiteVentanaX,limiteVentanaY)
+                mapa.cabeza2.retornarPosicion(limiteVentanaX,limiteVentanaY)
 
             #mostrar el mensaje
-            if marcador.obtenerVidas()>=0:
+            if self.marcador.obtenerVidas()>=0:
                 mensaje.estadoMensaje((False,True,False,False,False))
             else:
                 mensaje.estadoMensaje((False,False,True,False,False))
             self.ventana.dibujarFondo(pantalla)
-            mapa.dibujarMapa(pantalla)
+            redibujarComponentes()
             mensaje.dibujar(pantalla)
-            marcador.dibujar(pantalla)
             pygame.display.update()
             while True:
                 for event in pygame.event.get():
@@ -132,7 +109,7 @@ class Snake(object):
                                 dato = int(lines.strip())
                         dato += self.marcador.puntuacion
                         print (dato)
-                        arch = open(PUNTOS_PATH,'w')
+                        arch = open(pathAbsoluto,'w')
                         arch.write(str(dato))
                         arch.close()
                         exit()
@@ -140,27 +117,20 @@ class Snake(object):
                 if keys[pygame.K_ESCAPE]:
                     bandera=False
                     break
-                elif keys[pygame.K_SPACE] and marcador.obtenerVidas()>=0:
+                elif keys[pygame.K_SPACE] and self.marcador.obtenerVidas()>=0:
                     break
-                elif keys[pygame.K_RETURN] and marcador.obtenerVidas()<0:
-                    self.reiniciar(cola,cola2,marcador)
+                elif keys[pygame.K_RETURN] and self.marcador.obtenerVidas()<0:
+                    self.reiniciar(mapa.cola,mapa.cola2,self.marcador)
                     break
 
-            cabeza.cambiarPosicion(0,-64)
-            cabeza2.cambiarPosicion(704,512)
-
-            """
-
-            Preguntar acerca del método de arriba.
-            """
-            for segmento in cola.obtenerCola():
+            mapa.cabeza.cambiarPosicion(0,-64)
+            mapa.cabeza2.cambiarPosicion(704,512)
+            for segmento in mapa.cola.obtenerCola():
                 segmento.cambiarPosicion((-128,-128))
-            for segmento in cola2.obtenerCola():
+            for segmento in mapa.cola2.obtenerCola():
                 segmento.cambiarPosicion((-128,-128))
             self.ventana.dibujarFondo(pantalla)
-            malware.dibujar(pantalla)
-            mapa.dibujarMapa(pantalla)
-            marcador.dibujar(pantalla)
+            redibujarComponentes()
             pygame.display.update()
         pygame.quit()
 
@@ -172,5 +142,4 @@ class Snake(object):
         tam= len(cola2.obtenerCola())
         for i in range(tam):
             cola2.quitarUltimo()
-
 
