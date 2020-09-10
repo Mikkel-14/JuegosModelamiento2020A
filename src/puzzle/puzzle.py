@@ -166,64 +166,50 @@ class FragmentoImagen(Cuadro):
 
 
 class Imagen(Cuadro):
-    def __init__(self):
+    def __init__(self,contador,verificacion):
         self._Cuadro__posicion = None
         self.imagen = None
         self.dimension = DIM
         self.lista_cuadros = list()
-        self.cuadro_vacio = None
+        self.verificacion=verificacion
+        self.contador=contador
 
-    def mover(self,colision):
-        self.cuadro_vacio.mover(colision)
+    def mover(self, colision):
+        self.lista_cuadros[-1].iniciarMovimiento(colision)
 
-    def dibujar(self, posicion, imagen):
+    def dibujar(self, posicion, imagen, pantalla):
         self.imagen = pygame.image.load(imagen)
         self._Cuadro__posicion = posicion
 
     def descomponer(self):
-        listaimg = list()
-        listapos = list()
         listarand = list()
-
-        for i in range(N):
-            for j in range(N):
-                posx = int(40 + j * DIM)
-                posy = int(40 + i * DIM)
-                listapos.append((posx, posy))  # Se guardan las posiciones correctas de los fragmento
-                listarand.append((posx, posy))
-                imaux = pygame.Surface((DIM, DIM))  # Se crea una superficie
-                imaux.blit(self.imagen, (0, 0), (posx - 40, posy - 40, DIM, DIM))
-                listaimg.append(imaux)
+        for item in self.lista_cuadros:
+            listarand.append(item.getPosicionRef())
         random.shuffle(listarand)
-        for i in range(len(listapos)-1):
-                self.agregarCuadro(FragmentoImagen(
-                    Posicion(listapos[i][0], listapos[i][1]),
-                    listaimg[i],
-                    Posicion(listarand[i][0], listarand[i][1])))
-
-        self.cuadro_vacio = \
-            CuadroVacio(Posicion(listapos[len(listapos)-1][0],listapos[len(listapos)-1][1]),
-                        "puzzle\CuadroVacio.png",
-                        Posicion(listarand[len(listapos)-1][0],listarand[len(listapos)-1][1]))
+        i = int(0)
+        for item in self.lista_cuadros:
+            item.setPosicionActual(listarand[i])
+            i += 1
 
     def actualizarImagen(self, ventana):
         for i in range(len(self.lista_cuadros)):
             self.lista_cuadros[i].dibujar(ventana)
-        self.cuadro_vacio.dibujar(ventana)
+        ventana.blit(self.imagen, (500, 40))
 
     def agregarCuadro(self, fragmentoimagen):
         self.lista_cuadros.append(fragmentoimagen)
 
     def intercambiar(self, posicion):
-        for i in range(len(self.lista_cuadros)):
-            if (self.lista_cuadros[i].getPosicionActual() == posicion):
-                self.lista_cuadros[i].posicionActual.setX(self.cuadro_vacio.posicionActual.getX())
-                self.lista_cuadros[i].posicionActual.setY(self.cuadro_vacio.posicionActual.getY())
-        self.cuadro_vacio.posicionActual.setX(posicion[0])
-        self.cuadro_vacio.posicionActual.setY(posicion[1])
-
-    def getLista(self):
-        return self.lista_cuadros
+        listapos = list()
+        for elemento in self.lista_cuadros:
+            listapos.append((elemento.getPosicionActual(),elemento.getPosicionRef()))
+            if (elemento.getPosicionActual() == posicion):
+                elemento.mover(self.lista_cuadros[-1].getPosicionActual())
+                fragmento = elemento
+                self.contador.aumentar()
+                self.contador.verificar(fragmento)
+        self.lista_cuadros[-1].mover(posicion)
+        self.verificacion.verificarCondiciones(self.lista_cuadros)
 
 
 class Contador:
