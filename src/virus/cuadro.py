@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 import pygame
-from virus.listener import *
-from virus.solapamiento import *
-from virus.posicion import *
+from .listener import *
+from .posicion import *
 pygame.init()
 
 class Cuadro(ABC):
@@ -48,7 +47,7 @@ class CuadroPaginaWeb(Cuadro):
     def transformar(self):
         self.esMalo = not self.esMalo
 
-    def obtenerEstado(self):
+    def getCoordenadasyEsMalo(self):
         return (self.posicion.getCoordenadas(), self.esMalo)
 
 
@@ -68,30 +67,34 @@ class CuadroObjetivo(Cuadro):
         return self.posicion.getCoordenadas()
 
 class CuadroPersonaje(Cuadro):
-    def __init__(self, imagen, posicion, solapamiento):
+    def __init__(self, imagen, posicion, solapamiento, escuchador, tipo):
         super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
         self.solapamiento = solapamiento
-
+        self.listener = escuchador
+        self.tipo = tipo
     def dibujar(self, ventana):
         ventana.blit(self.imagen, self.posicion.getCoordenadas())
 
     def mover(self, dr):
-        listener = Listener()
-        keys = listener.detectar()
+        #NOTE: el keymap debe ser ARRIBA, ABAJO, IZQ, DER
+        tupla = self.listener.detectar()
         x, y = self.posicion.getCoordenadas()
-        if keys[pygame.K_UP] and self.solapamiento.verificarSolapamiento((x,y),(x, y - dr)):
+        if tupla[0] and self.solapamiento.verificarSolapamiento((x,y),(x, y - dr)):
             self.posicion.y -= dr
             pygame.time.delay(150)
-        if keys[pygame.K_DOWN] and self.solapamiento.verificarSolapamiento((x,y),(x, y + dr)):
+        if tupla[1] and self.solapamiento.verificarSolapamiento((x,y),(x, y + dr)):
             self.posicion.y += dr
             pygame.time.delay(150)
-        if keys[pygame.K_LEFT] and self.solapamiento.verificarSolapamiento((x,y),(x - dr, y)):
+        if tupla[2] and self.solapamiento.verificarSolapamiento((x,y),(x - dr, y)):
             self.posicion.x -= dr
             pygame.time.delay(150)
-        if keys[pygame.K_RIGHT] and self.solapamiento.verificarSolapamiento((x,y),(x + dr, y)):
+        if tupla[3] and self.solapamiento.verificarSolapamiento((x,y),(x + dr, y)):
             self.posicion.x += dr
             pygame.time.delay(150)
+
+    def getCoordenadasyTipo(self):
+        return (self.posicion.getCoordenadas(),self.tipo)
 
 class Mensaje(Cuadro):
     def __init__(self, imagen, nombre, posicion):
@@ -108,18 +111,21 @@ class Mensaje(Cuadro):
         pass
 
     def esperar(self, juego):
-        listener = Listener()
+        listener = Listener((pygame.K_SPACE, pygame.K_RETURN, pygame.K_ESCAPE))
         if self.aparecer:
             keys = listener.detectar()
-            if keys[pygame.K_SPACE] and self.nombre == 'instrucciones':
+            if keys[0] and self.nombre == 'instrucciones':
                 self.aparecer = False
-            elif keys[pygame.K_RETURN] and self.nombre == 'fallo':
-                self.aparecer = False
-                juego.reiniciarJuego()
-            elif keys[pygame.K_RETURN] and self.nombre == 'victoria':
+            elif keys[1] and self.nombre == 'fallo':
                 self.aparecer = False
                 juego.reiniciarJuego()
-            elif keys[pygame.K_ESCAPE] and self.nombre == 'victoria':
+            elif keys[1] and self.nombre == 'atrapado':
+                self.aparecer = False
+                juego.reiniciarJuego()
+            elif keys[1] and self.nombre == 'victoria':
+                self.aparecer = False
+                juego.reiniciarJuego()
+            elif keys[2] and self.nombre == 'victoria':
                 self.aparecer = False
                 juego.salirJuego()
 
@@ -137,12 +143,7 @@ class Mapa(Cuadro):
     def __init__(self, imagen):
         super().__init__(Posicion(0,0))
         self.imagen = pygame.image.load(imagen)
-        self.dictCuadros = dict()
-        self.dictCuadros['cuadroObjetivo'] = None
-        self.dictCuadros['cuadroPaginaWeb'] = list()
-        self.dictCuadros['cuadroPared'] = list()
-        self.dictCuadros['mensaje'] = list()
-        self.dictCuadros['personaje'] = None
+        self.listaCuadros = list()
 
     def dibujar(self, ventana):
         ventana.blit(self.imagen, self.posicion.getCoordenadas())
@@ -151,13 +152,18 @@ class Mapa(Cuadro):
         pass
 
     def agregarCuadros(self, cuadro):
-        if isinstance(cuadro, CuadroObjetivo):
-            self.dictCuadros['cuadroObjetivo'] = cuadro
-        elif isinstance(cuadro, CuadroPaginaWeb):
-            self.dictCuadros['cuadroPaginaWeb'].append(cuadro)
-        elif isinstance(cuadro, CuadroPared):
-            self.dictCuadros['cuadroPared'].append(cuadro)
-        elif isinstance(cuadro, CuadroPersonaje):
-            self.dictCuadros['personaje'] = cuadro
-        elif isinstance(cuadro, Mensaje):
-            self.dictCuadros['mensaje'].append(cuadro)
+        self.listaCuadros.append(cuadro)
+
+class CuadroMarcador(Cuadro):
+    def __init__(self, posicion, puntaje, fuente):
+        pygame.init()
+        super().__init__(posicion)
+        self.puntaje = puntaje
+        self.fuente = pygame.font.Font(fuente, 25)
+
+    def dibujar(self, win):
+        srf = self.fuente.render('Puntuacion: {:}'.format(self.puntaje.obtenerPuntos()), True, (0,0,0))
+        win.blit(srf, self.posicion.getCoordenadas())
+
+    def mover(self):
+        pass
