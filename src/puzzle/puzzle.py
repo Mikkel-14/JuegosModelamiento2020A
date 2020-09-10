@@ -204,13 +204,17 @@ class Verificacion:
 
 class Puntaje:
 
-    def __init__(self, puzzle):
-        self.puzzle = puzzle
+    def __init__(self,puzzle, contador):
+        self.contador = contador
+        self.puzzle=puzzle
         self.puntajeFinal = 0
 
-    def calcularPuntaje(self, numeroMovimientos):
-        self.puntajeFinal = int(100000 / numeroMovimientos)
-        print(self.puntajeFinal)
+    def calcularPuntaje(self,estado):
+        if estado:
+            self.puntajeFinal = int(1000 / self.contador.numeroMovimientos)
+
+        else:
+            self.puntajeFinal = -1
 
 #ponle tipo juego en el constructor
 class Puzzle():
