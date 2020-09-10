@@ -37,6 +37,27 @@ class Posicion:
     def actualizarCoordenadas(self, x, y):
         self.x = x
         self.y = y
+        
+class Mensaje(object):
+
+    def __init__(self):
+        self.mensajeInstruccion = [mensajeInstrucciones,False]
+        self.mensajeGanar = [mensajeGanar,False]
+        self.mensajePerder=[mensajePerder,False]
+
+
+    def dibujar(self,ventana):
+        if self.mensajeInstruccion[1]:
+            ventana.blit(self.mensajeInstruccion[0], (0,0))
+        elif self.mensajeGanar[1]:
+            ventana.blit(self.mensajeGanar[0], (0,0))
+        elif self.mensajePerder[1]:
+            ventana.blit(self.mensajePerder[0], (0,0))
+
+    def cambiarEstado(self,estado):
+        self.mensajeInstruccion[1]=estado[0]
+        self.mensajeGanar[1]=estado[1]
+        self.mensajePerder[1]=estado[2]
 
 
 class Cuadro(ABC):
