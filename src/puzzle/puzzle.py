@@ -175,7 +175,7 @@ class FragmentoImagen(Cuadro):
 
     def ocultar(self):
         self.estaOculto = True
-        self.imagen = pygame.image.load(os.path.join(os.path.dirname(__file__), "CuadroVacio.png"))
+        self.imagen = pygame.image.load(os.path.join(os.path.dirname(__file__), "CuadroVacio2.png"))
 
     def verificarOcultamiento(self):
         return self.estaOculto
