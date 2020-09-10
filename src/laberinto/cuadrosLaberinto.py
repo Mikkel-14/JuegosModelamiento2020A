@@ -35,7 +35,7 @@ class FondoLaberinto(CuadroLaberinto):
         pass
 
 
-class PersonajeLaberinto(CuadroLaberinto):
+class PersonajeLaberinto(CuadroLaberinto, ObservadorLaberinto):
     def __init__(self, imagen, posicion):
         super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
@@ -48,18 +48,22 @@ class PersonajeLaberinto(CuadroLaberinto):
     def mover(self, dr, sl):
         keys = ListenerLaberinto.detectar()
         (x, y) = (self.posicion.x, self.posicion.y)
-        if keys[pygame.K_UP] and sl.verificar((x, y - dr)):
+        if keys[pygame.K_UP] and sl.verificar(self, (x, y - dr)):
             self.posicion.actualizarY(y - dr)
             pygame.time.delay(150)
-        if keys[pygame.K_DOWN] and sl.verificar((x, y + dr)):
+        if keys[pygame.K_DOWN] and sl.verificar(self, (x, y + dr)):
             self.posicion.actualizarY(y + dr)
             pygame.time.delay(150)
-        if keys[pygame.K_LEFT] and sl.verificar((x - dr, y)):
+        if keys[pygame.K_LEFT] and sl.verificar(self, (x - dr, y)):
             self.posicion.actualizarX(x - dr)
             pygame.time.delay(150)
-        if keys[pygame.K_RIGHT] and sl.verificar((x + dr, y)):
+        if keys[pygame.K_RIGHT] and sl.verificar(self, (x + dr, y)):
             self.posicion.actualizarX(x + dr)
             pygame.time.delay(150)
+
+    def actualizar(self, virus, enemigo, meta, perdida, corazon):
+        if virus or enemigo:
+            self.numeroVidas -= 1
 
 
 class EnemigoLaberinto(CuadroLaberinto, ObservadorLaberinto):
@@ -91,7 +95,7 @@ class EnemigoLaberinto(CuadroLaberinto, ObservadorLaberinto):
         if enemigo:
             self.posicion.actualizarX(s.posInicial_Enemigo[0])
             self.posicion.actualizarY(s.posInicial_Enemigo[1])
-            
+
 
 class CaminoLaberinto(CuadroLaberinto):
     def __init__(self, imagen, posicion):
@@ -131,7 +135,7 @@ class MetaLaberinto(CuadroLaberinto):
     def mover(self):
         pass
 
-class MensajeLaberinto(CuadroLaberinto):
+class MensajeLaberinto(CuadroLaberinto, ObservadorLaberinto):
     def __init__(self, imagen, nombre):
         super().__init__(PosicionLaberinto(0, 0))
         self.imagen = pygame.image.load(imagen)
@@ -155,45 +159,37 @@ class MensajeLaberinto(CuadroLaberinto):
     def mover(self):
         pass
 
+    def actualizar(self, virus, enemigo, meta, perdida, corazon):
+        if perdida and self.nombre == 'perdida':
+            self.aparecer = True
+        elif virus and not perdida:
+            if self.nombre == 'virus' + str(corazon - 1):
+                self.aparecer = True
+        elif enemigo and self.nombre == 'enemigo' and not perdida:
+            self.aparecer = True
+        elif meta and self.nombre == 'victoria':
+            self.aparecer = True
+
 class TableroLaberinto(CuadroLaberinto):
     def __init__(self):
         super().__init__(PosicionLaberinto(0, 0))
-        self.dictCuadros = dict()
-        self.dictCuadros['camino'] = list()
-        self.dictCuadros['virus'] = list()
-        self.dictCuadros['personaje'] = None
-        self.dictCuadros['fondo'] = None
-        self.dictCuadros['meta'] = None
-        self.dictCuadros['mensaje'] = list()
-        self.dictCuadros['vidas'] = list()
+        self.listaCuadros = list()
 
     def agregarCuadros(self, cuadro):
-        if isinstance(cuadro, CaminoLaberinto):
-             self.dictCuadros['camino'].append(cuadro)
-        elif isinstance(cuadro, VirusLaberinto):
-             self.dictCuadros['virus'].append(cuadro)
-        elif isinstance(cuadro, PersonajeLaberinto):
-             self.dictCuadros['personaje'] = cuadro
-        elif isinstance(cuadro, MetaLaberinto):
-             self.dictCuadros['meta'] = cuadro
-        elif isinstance(cuadro, FondoLaberinto):
-             self.dictCuadros['fondo'] = cuadro
-        elif isinstance(cuadro, MensajeLaberinto):
-            self.dictCuadros['mensaje'].append(cuadro)
-        elif isinstance(cuadro, VidaLaberinto):
-            self.dictCuadros['vidas'].append(cuadro)
+        self.listaCuadros.append(cuadro)
 
-    def dibujar(self,ventana):
+    def dibujar(self):
         pass
 
-    def mover(self, solapamiento):
+    def mover(self):
         pass
 
 
-class VidaLaberinto(CuadroLaberinto):
-    def __init__(self, imagen1, imagen2, posicion):
+class VidaLaberinto(CuadroLaberinto, ObservadorLaberinto):
+    def __init__(self, imagen1, imagen2, posicion, numCorazon):
         super().__init__(posicion)
         self.imagenes = [pygame.image.load(imagen1), pygame.image.load(imagen2)]
+        self.numCorazon = numCorazon
         self.lleno = 1
 
     def dibujar(self, ventana):
@@ -202,3 +198,8 @@ class VidaLaberinto(CuadroLaberinto):
 
     def mover(self):
         pass
+
+    def actualizar(self, virus, enemigo, meta, perdida, corazon):
+        if virus or enemigo:
+            if self.numCorazon == corazon and self.lleno:
+                self.lleno = 0
