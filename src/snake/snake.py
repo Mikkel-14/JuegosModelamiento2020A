@@ -52,13 +52,11 @@ class Snake(object):
                 clock.tick(self.velocidad)
                 for event in pygame.event.get():
                         if event.type == pygame.QUIT:
-                            pathAbsolutoScript = os.path.dirname(file)
-                            pathAbsoluto = os.path.join(pathAbsolutoScript,"../assets/puntos.dat" )
+                            pathAbsoluto = obtenerPathAbsoluto('assets/puntos.dat')
                             with open (pathAbsoluto) as f:
                                 for lines in f:
                                     dato = int(lines.strip())
                             dato += self.marcador.puntuacion
-                            print (dato)
                             arch = open(pathAbsoluto,'w')
                             arch.write(str(dato))
                             arch.close()
@@ -103,14 +101,11 @@ class Snake(object):
             while True:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
-                        #pathAbsolutoScript = os.path.dirname(file)
-                        #pathAbsoluto = os.path.join(pathAbsolutoScript,"../assets/puntos.dat" )
                         pathAbsoluto = obtenerPathAbsoluto('assets/puntos.dat')
                         with open (pathAbsoluto) as f:
                             for lines in f:
                                 dato = int(lines.strip())
                         dato += self.marcador.puntuacion
-                        print (dato)
                         arch = open(pathAbsoluto,'w')
                         arch.write(str(dato))
                         arch.close()
@@ -118,6 +113,14 @@ class Snake(object):
                 keys = Control_Movimiento.detectarMovimiento()
                 if keys[pygame.K_ESCAPE]:
                     bandera=False
+                    pathAbsoluto = obtenerPathAbsoluto('assets/puntos.dat')
+                    with open (pathAbsoluto) as f:
+                        for lines in f:
+                            dato = int(lines.strip())
+                    dato += self.marcador.puntuacion
+                    arch = open(pathAbsoluto,'w')
+                    arch.write(str(dato))
+                    arch.close()
                     break
                 elif keys[pygame.K_SPACE] and self.marcador.obtenerVidas()>=0:
                     break
