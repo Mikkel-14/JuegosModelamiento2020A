@@ -265,49 +265,144 @@ class Puntaje:
         else:
             self.puntajeFinal = -1
 
-#ponle tipo juego en el constructor
-class Puzzle():
+class Puzzle:
+
+    def __init__(self):
+        pygame.init()
+        self.dimensiones = (500,500)
+        self.titulo = 'I <3 PUZZLE'
+        self.clock = pygame.time.Clock()
+        self.fondo = None
 
     def iniciarJuego(self):
-        pygame.init()
-        clock = pygame.time.Clock()
-        imagen=Imagen()
-        imagen.dibujar(Posicion(0, 0), "puzzle\ImagenMonitor.png",)
-        imagen.descomponer()
-        puzzle = Puzzle()
-        puntaje = Puntaje(puzzle)
-        verificacion = Verificacion(imagen, puntaje)
-        contador = Contador(verificacion)
-        colision = Colision(contador, imagen)
+        CUADROVACIO_PATH = 'puzzle/CuadroVacio.png'
+        TROYANO_PATH = 'puzzle/Troyano.png'
+
+        titulo_juego = pygame.display.set_caption(self.titulo) 
+
 
         pantalla_juego = pygame.display.set_mode(DIMENSION)  # Se crea la ventana con las dimensiones especificas
-        titulo_juego = pygame.display.set_caption('I <3 PUZZLE')  # Se inserta un titulo a la ventana creada
+        
+        mensaje=Mensaje()
+        mensaje.cambiarEstado((True,False,False))
+        mensaje.dibujar(pantalla_juego)
+        pygame.display.update()
+
+        
+        # Instancia de Contador
+        contador = Contador()
+        # Instancia de Puntaje
+        puntaje = Puntaje(self, contador)
+        # instancia de la imagen
+        imagen = Imagen(contador, Verificacion(puntaje))
+        # Instancia de Verificacion
+        # Instancia de Colision
+        colision = Colision(imagen)
+        imagen.dibujar(Posicion(0, 0), TROYANO_PATH, pantalla_juego)
+        # Instancias de los fragmentos
+        listapos = list()
+        listaimg = list()
+        listaFragmentos = list()
+        for i in range(N):
+            for j in range(N):
+                posx = int(40 + j * DIM)
+                posy = int(40 + i * DIM)
+                listapos.append((posx, posy))  # Se guardan las posiciones correctas de los fragmento
+                imaux = pygame.Surface((DIM, DIM))  # Se crea una superficie
+                imaux.blit(pygame.image.load(TROYANO_PATH), (0, 0), (posx - 40, posy - 40, DIM, DIM))
+                listaimg.append(imaux)
+
+        #Se agrega las listas de imagenes y las posiciones de referencia a la lista de Fragmentos
+        for i in range(len(listapos)):
+             listaFragmentos.append(FragmentoImagen(
+                    Posicion(listapos[i][0], listapos[i][1]),
+                    listaimg[i]))
+
+        # Instancia del cuadro Vacio
+        cuadro_vacio = CuadroVacio(Posicion(listapos[-1][0], listapos[-1][1]), CUADROVACIO_PATH)
+
+        for i in range(len(listaFragmentos) - 1):
+            imagen.agregarCuadro(listaFragmentos[i])
+
+        imagen.agregarCuadro(cuadro_vacio)
+        imagen.descomponer()
+        clock = pygame.time.Clock()
+
+        pantalla_juego = pygame.display.set_mode(DIMENSION)  # Se crea la ventana con las dimensiones especificas
+ 
+        self.fondo = pantalla_juego.fill((255, 255, 255))  # Dar un color blanco a la pantalla
+        pygame.display.set_caption(self.titulo)
 
         iniciado = True
+        bandera=False
         while iniciado:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    iniciado=False
-                pantalla_juego.blit(pygame.transform.scale(pygame.image.load("puzzle\img\inicioPuzzle.png"),(500,300)),(0,0))
-                pygame.display.update()
-        iniciado = True
-        while iniciado:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    iniciado = False
-                if puntaje.puntajeFinal != 0:
-                    ctypes.windll.user32.MessageBoxW(0, "TU PUNTAJE OBTENIDO FUE:" + str(puntaje.puntajeFinal)
-                                                     , "FELICIDADES GANASTE!!", 1)
-                    pygame.quit()
-                    puzzle.finalizarJuego()
-                    iniciado = False
-                pantalla_juego.fill((255, 255, 255))  # Dar un color blanco a la pantalla
-                imagen.mover(colision)
-                imagen.actualizarImagen(pantalla_juego)
-                pygame.display.update()
+            
+            try:
+                self.clock.tick(30)
+                for event in pygame.event.get():
+                    if bandera:
+                        pantalla_juego.fill((255, 255, 255))  # Dar un color blanco a la pantalla
+                        imagen.mover(colision)
+                        imagen.actualizarImagen(pantalla_juego)
+                        pygame.display.update()
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_ESCAPE:
+                            pantalla_juego.fill((255, 255, 255))  # Dar un color blanco a la pantalla
+                            imagen.mover(colision)
+                            imagen.actualizarImagen(pantalla_juego)
+                            pygame.display.update()
+                            bandera=True
+                        if event.key == pygame.K_r:
+                            self.reiniciarJuego()
+                        if event.key == pygame.K_e:
+                            self.salirJuego(puntaje.puntajeFinal)
+                            break
+                    if event.type == pygame.QUIT:
+                        self.salirJuego(puntaje.puntajeFinal)
+                        break
 
-    def finalizarJuego(self):
-        pass
+                    
+                    
+
+                    if puntaje.puntajeFinal > 0:
+                        #ctypes.windll.user32.MessageBoxW(0, "TU PUNTAJE OBTENIDO FUE:" + str(puntaje.puntajeFinal)
+                        #                                , "FELICIDADES GANASTE!!", 1)
+                        mensaje.cambiarEstado((False,True,False))
+                        mensaje.dibujar(pantalla_juego)
+                        pygame.display.update()
+                        bandera=False
+                    
+
+                    elif puntaje.puntajeFinal == -1:
+                        #ctypes.windll.user32.MessageBoxW(0, "TU PUNTAJE OBTENIDO FUE:" + str(puntaje.puntajeFinal)
+                        #                                , "FELICIDADES GANASTE!!", 1)
+                        print("zzzzzzzzz")
+                        mensaje.cambiarEstado((False,False,True))
+                        mensaje.dibujar(pantalla_juego)
+                        pygame.display.update()
+                        bandera=False
+
+                        
+                      
+
+            except Exception:
+                break
+
+ 
     def reiniciarJuego(self):
-        pass
+        pygame.quit()
+        self.iniciarJuego()
+
+    def salirJuego(self,puntaje):
+        iniciado=False
+        pygame.quit()
+        if puntaje==-1:
+            puntaje=0
+        PUNTOS_PATH = obtenerPathAbsoluto('../assets/puntos.dat')
+        with open(PUNTOS_PATH) as f:
+            for lines in f:
+                dato = int(lines.strip())
+        dato += puntaje
+        arch = open(PUNTOS_PATH,'w')
+        arch.write(str(dato))
+        arch.close()
