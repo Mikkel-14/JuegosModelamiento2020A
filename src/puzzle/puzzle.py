@@ -206,13 +206,17 @@ class Imagen(Cuadro):
 
 
 class Contador:
-    def __init__(self, verificacion):
+    def __init__(self):
         self.numeroMovimientos = int(0)
-        self.verificacion = verificacion
 
     def aumentar(self):
         self.numeroMovimientos += 1
-        self.verificacion.verificarCondiciones(self.numeroMovimientos)
+        print(self.numeroMovimientos)
+        
+
+    def verificar(self, fragmento):
+        if (self.numeroMovimientos % 10 == 0) & (self.numeroMovimientos >= 1) & isinstance(fragmento,FragmentoImagen):
+            fragmento.ocultar()
 
 
 class Colision:
