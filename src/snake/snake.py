@@ -3,6 +3,7 @@ import pygame
 from .Control_Movimiento import *
 from .Mensaje import *
 from .Marcador import *
+from herramientas import *
 
 class Snake(object):
 
@@ -53,7 +54,7 @@ class Snake(object):
                         if event.type == pygame.QUIT:
                             pathAbsolutoScript = os.path.dirname(file)
                             pathAbsoluto = os.path.join(pathAbsolutoScript,"../assets/puntos.dat" )
-                            with open (pathAbsoluto) as f: 
+                            with open (pathAbsoluto) as f:
                                 for lines in f:
                                     dato = int(lines.strip())
                             dato += self.marcador.puntuacion
@@ -102,9 +103,10 @@ class Snake(object):
             while True:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
-                        pathAbsolutoScript = os.path.dirname(file)
-                        pathAbsoluto = os.path.join(pathAbsolutoScript,"../assets/puntos.dat" )
-                        with open (pathAbsoluto) as f: 
+                        #pathAbsolutoScript = os.path.dirname(file)
+                        #pathAbsoluto = os.path.join(pathAbsolutoScript,"../assets/puntos.dat" )
+                        pathAbsoluto = obtenerPathAbsoluto('assets/puntos.dat')
+                        with open (pathAbsoluto) as f:
                             for lines in f:
                                 dato = int(lines.strip())
                         dato += self.marcador.puntuacion
