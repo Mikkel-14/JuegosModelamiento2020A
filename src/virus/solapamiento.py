@@ -60,3 +60,23 @@ class SolapamientoJugador(Solapamiento):
                     self.notify()
                     verificador = True
         return verificador
+
+class SolapamientoHacker(Solapamiento):
+    def __init__(self, Mapa, juego):
+        super().__init__(Mapa,juego)
+
+    def verificarSolapamiento(self, coordenadaActual, nuevasCoordenadas):
+        verificador = False
+        for cuadro in self.mapa.listaCuadros:
+            if isinstance(cuadro, CuadroPersonaje):
+                posicion, tipo = cuadro.getCoordenadasyTipo()
+                if posicion == nuevasCoordenadas and tipo == 'bueno': #verifica que la pagina web a la que se va a mover no es un virus
+                    self.tipoCuadroSolapado = 'personaje'
+                    self.notify()
+                    verificador = True
+            if isinstance(cuadro, CuadroPaginaWeb):
+                posicion, esMalo = cuadro.getCoordenadasyEsMalo()
+                if posicion == nuevasCoordenadas: #verifica que la pagina web a la que se va a mover no es un virus
+                    self.tipoCuadroSolapado = 'paginaNormal'
+                    verificador = True
+        return verificador
