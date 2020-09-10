@@ -28,6 +28,16 @@ class Posicion:
     def setX(self, x):
         self.x = x
 
+    def setY(self, y):
+        self.y = y
+
+    def obtenerCoordenadas(self):
+        return self.x, self.y
+
+    def actualizarCoordenadas(self, x, y):
+        self.x = x
+        self.y = y
+
 
 class Cuadro(ABC):
     def __init__(self, posicionRef, posicionAct):
