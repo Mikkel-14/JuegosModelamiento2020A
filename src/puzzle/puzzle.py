@@ -4,10 +4,26 @@ import random
 import ctypes
 import pygame
 
+import os
+import sys
+
+import os.path
+from .herramientas import *
+
+mensajeInstrucciones= pygame.image.load(os.path.join(os.path.dirname(__file__), "Inicio_Puzzle.png"))
+mensajeInstrucciones = pygame.transform.scale(mensajeInstrucciones, (1000, 500))
+mensajeGanar= pygame.image.load(os.path.join(os.path.dirname(__file__), "Ganar.png"))
+mensajeGanar = pygame.transform.scale(mensajeGanar, (1000, 500))
+mensajePerder= pygame.image.load(os.path.join(os.path.dirname(__file__), "Perder.png"))
+mensajePerder = pygame.transform.scale(mensajePerder, (1000, 500))
+
+
+
 NIVEL = 0
 N = NIVEL + 2
 DIM = int(420 / N)
-DIMENSION = 500, 500  # Se define las dimensiones de la ventana del juego
+DIMENSION = 1000, 500  # Se define las dimensiones de la ventana del juego
+
 
 class Listener:
     @staticmethod
