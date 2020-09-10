@@ -108,25 +108,40 @@ class CuadroVacio(Cuadro):
 
 class FragmentoImagen(Cuadro):
 
-    def __init__(self, posicionR, imagen, posicionA):
+    def __init__(self, posicionR, imagen):
         self._Cuadro__posicionReferencial = posicionR
+        self._Cuadro__posicionActual = None
         self.imagen = imagen
-        self._Cuadro__posicionActual= posicionA
+        self.estaOculto = False
 
     def dibujar(self, fondo):
         dimension = (DIM, DIM)
         fondo.blit(pygame.transform.scale(self.imagen, dimension),
                    (self.posicionActual.getX(), self.posicionActual.getY()))
 
-    def mover(self):
-        pass
+    def mover(self, pos):
+        self.posicionActual.setX(pos[0])
+        self.posicionActual.setY(pos[1])
 
     def getPosicionActual(self):
-        (x, y) = self.posicionActual.getX(), self.posicionActual.getY()
-        return (x, y)
+        x = self.posicionActual.getX()
+        y = self.posicionActual.getY()
+        return x, y
+
+    def getPosicionRef(self):
+        x = self.posicionReferencial.getX()
+        y = self.posicionReferencial.getY()
+        return x, y
 
     def setPosicionActual(self, posicion):
-        self.posicionActual = Posicion(posicion[0],posicion[1])
+        self._Cuadro__posicionActual = Posicion(posicion[0], posicion[1])
+
+    def ocultar(self):
+        self.estaOculto = True
+        self.imagen = pygame.image.load(os.path.join(os.path.dirname(__file__), "CuadroVacio.png"))
+
+    def verificarOcultamiento(self):
+        return self.estaOculto
 
 
 class Imagen(Cuadro):
