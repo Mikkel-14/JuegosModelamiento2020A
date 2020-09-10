@@ -9,12 +9,10 @@ N = NIVEL + 2
 DIM = int(420 / N)
 DIMENSION = 500, 500  # Se define las dimensiones de la ventana del juego
 
-
 class Listener:
     @staticmethod
     def detectar() -> tuple:
-        return pygame.key.get_pressed()
-
+        return pygame.key.get_pressed() 
 
 class Posicion:
     def __init__(self, x, y):
