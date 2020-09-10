@@ -211,9 +211,7 @@ class Contador:
 
     def aumentar(self):
         self.numeroMovimientos += 1
-        print(self.numeroMovimientos)
-        
-
+       
     def verificar(self, fragmento):
         if (self.numeroMovimientos % 10 == 0) & (self.numeroMovimientos >= 1) & isinstance(fragmento,FragmentoImagen):
             fragmento.ocultar()
@@ -231,20 +229,26 @@ class Colision:
 
 
 class Verificacion:
-    def __init__(self, imagen, puntaje):
-        self.imagen = imagen
+    def __init__(self, puntaje):
         self.puntaje = puntaje
 
-    def verificarCondiciones(self, numeroMovimientos):
-        cont = 0
+    def verificarCondiciones(self, listafragmentos):
+        contG = 0
+        contP=0
+        for elemento in listafragmentos:
+            if isinstance(elemento,FragmentoImagen):
+                if elemento.verificarOcultamiento():
+                    contP += 1
+        if contP == len(listafragmentos)-1:
+            self.puntaje.calcularPuntaje(False)
+            
+        for elemento in listafragmentos:
+            if (elemento.getPosicionActual()==elemento.getPosicionRef()):
+                contG += 1
 
-        for elemento in self.imagen.getLista():
-            if ((elemento.posicionReferencial.getX(), elemento.posicionReferencial.getY())
-                    == (elemento.posicionActual.getX(),elemento.posicionActual.getY())):
-                cont += 1
-        if cont == len(self.imagen.getLista()):
-            self.puntaje.calcularPuntaje(numeroMovimientos)
-
+        if contG == len(listafragmentos):
+            self.puntaje.calcularPuntaje(True)
+            
 
 class Puntaje:
 
