@@ -220,16 +220,14 @@ class Contador:
 
 
 class Colision:
-    def __init__(self, contador, imagen):
+    def __init__(self, imagen):
         self.imagen = imagen
-        self.contador = contador
 
     def verificarColision(self, posicion):
-
-        for pos in self.imagen.getLista():
+        for pos in self.imagen.lista_cuadros:
             if pos.getPosicionActual() == posicion:
                 self.imagen.intercambiar(posicion)
-                self.contador.aumentar()
+                break
 
 
 class Verificacion:
