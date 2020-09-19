@@ -10,7 +10,8 @@ from abc import ABC, abstractmethod
 from ruta.assets.herramientas import *
 from ruta.assets.settingsMaya import *
 from ruta.audioPregunta import *
-from ruta.solapamiento import *
+from ruta.solapamientoObstaculo import *
+from ruta.solapamientoOpcion import *
 from ruta.listener import *
 from ruta.fabricas import *
 
