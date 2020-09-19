@@ -8,7 +8,8 @@ import os
 import sys
 from ruta.assets.settingsMaya import *
 from ruta.audioPregunta import *
-from ruta.solapamiento import *
+from ruta.solapamientoObstaculo import *
+from ruta.solapamientoOpcion import *
 from ruta.posicionMaya import *
 from ruta.fabricas import *
 from ruta.figuras import *
@@ -86,7 +87,7 @@ class Ruta():
         solapamientoOpcionB = SolapamientoConOpcion(verificacion)
         solapamientoOpcionC = SolapamientoConOpcion(verificacion)
         solapamientosConOpcion = [solapamientoOpcionA, solapamientoOpcionB, solapamientoOpcionC]
-        solapamientoConObstaculo = SolapamientoConObstaculo(verificacion, camino)
+        
 
         opcionA = FiguraOpcion('img/botonA.png', Posicion(settings["coordenadaOpcion"][0]), "A")
         opcionA.añadirObservador(solapamientoOpcionA)
@@ -103,6 +104,9 @@ class Ruta():
 
         self.mapa.agregarFigura(Fondo('img/fondoJuego.png', Posicion(settings["coordenadaFondo"])))        
         self.mapa.agregarFigura(camino)
+
+        solapamientoConObstaculo = SolapamientoConObstaculo(self.mapa)
+
         self.mapa.agregarFigura(FiguraVida(Posicion(settings["coordenadaFigVida"])))
         self.mapa.agregarFigura(Marcador('img/marcador.png', Posicion(settings["coordenadaMarcador"]), puntaje))
         self.mapa.agregarFigura(opcionA)

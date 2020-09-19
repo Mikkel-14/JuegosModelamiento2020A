@@ -35,10 +35,6 @@ class Verificacion:
             self.mapa.actualizar(False) # False para actualizar la FiguraVida y restar una vida
         self._i+=1
 
-    def comunicarSolapamientoObstaculo(self, valor): # Comunica a mapa el mensaje de la verificación en Solapamiento de que se solapó un obstáculo 
-        if self.mapa.obtenerCamino().estadoMovimiento and valor: # solo si el camino sigue en 
-            self.mapa.actualizar(False) # False para actualizar la FiguraVida, la visibilidad de opciones y para restar una vida
-            
     def reiniciarNumeroPreguntasContestadas(self):
         self._numeroPreguntasContestadas = 0
 

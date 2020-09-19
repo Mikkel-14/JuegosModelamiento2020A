@@ -1,6 +1,6 @@
 #=============================================================================================
 #                               JUEGO RUTA MAYA - Version 0.9
-#       Interfaz Solapamiento y clases SolapamientoConOpción y SolapamientoConObstáculo
+#                                Clase SolapamientoConOpción 
 # Implementado por: Alejandro Llanganate, Anderson Cárdenas, Henrry Cordovillo y David Moreno
 #=============================================================================================
 
@@ -9,34 +9,7 @@ from ruta.verificacion import *
 import math
 
 
-class Solapamiento():
-    @abstractmethod
-    def verificarSolapamiento(self):
-        pass
-
-
-class SolapamientoConObstaculo(Solapamiento):
-    def __init__(self, verificacion, camino):
-        self.verificacion = verificacion
-        self.camino = camino
-        self.umbral = int(settings["tamañoVentana"][1]*0.09) # Para controlar la distancia minima entre los objetos al solapar
-        self.s_posicionObstaculo = None # Variable para asociar la posición de un obstáculo
-    
-    def verificarSolapamiento(self, posicionPersonaje):
-        (x1, y1) = posicionPersonaje # se almacena en una tupla
-
-        for obstaculo in self.camino.obtenerObstaculos():
-            (x2, y2) = obstaculo.posicion.obtenerCoordenadas()
-            distancia = math.sqrt(math.pow(x2-x1, 2) + math.pow(y2-y1, 2)) # Aplicación de la fórmula de distancia entre dos puntos
-
-            if distancia <= self.umbral: # verifica la distancia mínima para el solapamiento con un obstáculo
-                self.verificacion.comunicarSolapamientoObstaculo(True) # Luego verificación comunicará a Mapa dicho solapamiento
-                obstaculo.posicion.actualizarY(settings["tamañoVentana"][1])
-            else:
-                self.verificacion.comunicarSolapamientoObstaculo(False) # Luego verificación comunicará a Mapa que no ocurrió solapamiento
-
-
-class SolapamientoConOpcion(Solapamiento):
+class SolapamientoConOpcion():
     def __init__(self, verificacion):
         self.verificacion = verificacion
         self.umbral = int(settings["tamañoVentana"][1]*0.08)
