@@ -10,7 +10,7 @@ class FormularioRegistro(QMainWindow):
     def __init__(self,cf):
         super(FormularioRegistro, self).__init__()
         loadUi(obtenerPathAbsoluto("formularioRegistroUI.ui"), self) # transforma XML en término de clase en Py
-        self.botonIngresar.clicked.connect(self.onClickRegistrar) # asociamos la accion de click en un boton con una función
+        self.botonRegistrar.clicked.connect(self.onClickRegistrar) # asociamos la accion de click en un boton con una función
         self.botonVolver.clicked.connect(self.onClickRegresar)
         self.labelIncorrecto.hide()
         self.controlador = cf

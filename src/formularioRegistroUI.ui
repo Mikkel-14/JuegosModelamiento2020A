@@ -72,7 +72,7 @@
      <enum>QLineEdit::Password</enum>
     </property>
    </widget>
-   <widget class="QPushButton" name="botonIngresar">
+   <widget class="QPushButton" name="botonRegistrar">
     <property name="geometry">
      <rect>
       <x>380</x>
@@ -82,12 +82,12 @@
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">#botonIngresar {
+     <string notr="true">#botonRegistrar {
 	background-color: rgb(32, 74, 135);
 	color: white;
 }
 
-#botonIngresar:hover {
+#botonRegistrar:hover {
 	background-color: rgb(78, 154, 6);
 }</string>
     </property>

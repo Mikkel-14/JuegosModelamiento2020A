@@ -39,7 +39,7 @@ class Virus(Obstaculo):
     def mover(self):
         alturaImagen = self.imagen.get_height()
         if (self.posicion.obtenerCoordenadas()[1] >= (-settings["tamañoVentana"][1]-alturaImagen)): # En el caso de que el obstáculo este dentro del margen de la ventana
-            self.posicion.actualizarY(self.posicion.obtenerCoordenadas()[1]-settings["tamañoVentana"][1]*0.03) # Entonces se mueve hacia arriba
+            self.posicion.actualizarY(self.posicion.obtenerCoordenadas()[1]-10) # Entonces se mueve hacia arriba
         else:  # caso contrario se reubica al obstáculo
             self.posicion.actualizarY(settings["tamañoVentana"][1]) # a su posición en y original 
             self.posicion.actualizarX(randint(int(settings["limiteMinObstaculoX"]), int(settings["limiteMaxObstaculoX"]))) # y con un valor aleatorio en x
@@ -58,7 +58,7 @@ class ArañaGigante(Obstaculo):
     def mover(self):
         alturaImagen = self.imagen.get_height()
         if (self.posicion.obtenerCoordenadas()[1] >= (-settings["tamañoVentana"][1]-alturaImagen)): # En el caso de que el obstáculo este dentro del margen de la ventana
-            self.posicion.actualizarY(self.posicion.obtenerCoordenadas()[1]-settings["tamañoVentana"][1]*0.03) # Entonces se mueve hacia arriba
+            self.posicion.actualizarY(self.posicion.obtenerCoordenadas()[1]-10) # Entonces se mueve hacia arriba
         else:  # caso contrario se reubica al obstáculo
             self.posicion.actualizarY(settings["tamañoVentana"][1]) # a su posición en y original 
             self.posicion.actualizarX(randint(int(settings["limiteMinObstaculoX"]), int(settings["limiteMaxObstaculoX"]))) # y con un valor aleatorio en x
@@ -77,7 +77,7 @@ class MailInfectado(Obstaculo):
     def mover(self):
         alturaImagen = self.imagen.get_height()
         if (self.posicion.obtenerCoordenadas()[1] >= (-settings["tamañoVentana"][1]-alturaImagen)): # En el caso de que el obstáculo este dentro del margen de la ventana
-            self.posicion.actualizarY(self.posicion.obtenerCoordenadas()[1]-settings["tamañoVentana"][1]*0.03) # Entonces se mueve hacia arriba
+            self.posicion.actualizarY(self.posicion.obtenerCoordenadas()[1]-10) # Entonces se mueve hacia arriba
         else:  # caso contrario se reubica al obstáculo
             self.posicion.actualizarY(settings["tamañoVentana"][1]) # a su posición en y original 
             self.posicion.actualizarX(randint(int(settings["limiteMinObstaculoX"]), int(settings["limiteMaxObstaculoX"]))) # y con un valor aleatorio en x
