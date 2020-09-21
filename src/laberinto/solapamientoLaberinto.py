@@ -1,4 +1,4 @@
-from laberinto.cuadrosLaberinto import *
+from .cuadrosLaberinto import *
 
 class SolapamientoLaberinto:
 

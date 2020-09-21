@@ -8,3 +8,5 @@
 14,11,snake
 18,6,virus
 18,7,virus
+10,4,tableroPuntaje
+10,9,tableroPuntaje

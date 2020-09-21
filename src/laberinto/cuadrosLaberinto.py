@@ -2,9 +2,10 @@ import pygame
 import laberinto.settingsLaberinto as s
 from pygame.locals import *
 from abc import ABC, abstractmethod
-from laberinto.posicionLaberinto import *
-from laberinto.listenerLaberinto import *
-from laberinto.observadorLaberinto import *
+from .posicionLaberinto import *
+from .listenerLaberinto import *
+from .observadorLaberinto import *
+from .herramientas import *
 
 class CuadroLaberinto(ABC):
     def __init__(self, posicion):

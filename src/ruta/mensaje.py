@@ -11,6 +11,9 @@ from ruta.boton import *
 
 
 class Mensaje:
+
+    _flag = True
+
     def __init__(self, imagen, posicion):
         self.imagen = pygame.image.load(obtenerPathAbsoluto(imagen, __file__))
         self.imagen = pygame.transform.scale(self.imagen, settings["tamañoVentana"])
@@ -40,8 +43,12 @@ class Mensaje:
                         self.visibilidad = False
                     elif boton.obtenerTipo() == "VOLVER_AL_MUSEO" and boton.onClic(event)[1]:
                         pygame.quit()
-
+                        self._flag = False
+                        self.visibilidad = False
+                        break
                 if event.type == pygame.QUIT:
+                    self.visibilidad = False
+                    break
                     pygame.quit()
-
-            pygame.display.update()
+            if (self.visibilidad or self._flag):
+                pygame.display.update()

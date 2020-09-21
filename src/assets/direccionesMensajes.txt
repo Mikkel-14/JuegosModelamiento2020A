@@ -4,3 +4,4 @@ img/msjRutaMaya.png,ruta
 img/msjSnake.png,snake
 img/msjEvitandoVirus.png,virus
 img/pantallaInicio.jpg,inicio
+img/puntuacion.png,tableroPuntaje

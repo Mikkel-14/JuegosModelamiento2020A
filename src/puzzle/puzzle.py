@@ -236,11 +236,10 @@ class Contador:
 
     def aumentar(self):
         self.numeroMovimientos += 1
-        print(self.numeroMovimientos)
         
 
     def verificar(self, fragmento):
-        if (self.numeroMovimientos % 5 == 0) & (self.numeroMovimientos >= 1) & isinstance(fragmento,FragmentoImagen):
+        if (self.numeroMovimientos % 10 == 0) & (self.numeroMovimientos >= 1) & isinstance(fragmento,FragmentoImagen):
             fragmento.ocultar()
 
 
@@ -303,13 +302,17 @@ class Puzzle:
         self.titulo = 'I <3 PUZZLE'
         self.clock = pygame.time.Clock()
         self.fondo = None
+        # Instancia de Contador
+
 
     def iniciarJuego(self):
         CUADROVACIO_PATH = 'puzzle/CuadroVacio.png'
         TROYANO_PATH = 'puzzle/Troyano.png'
 
-        titulo_juego = pygame.display.set_caption(self.titulo) 
-
+        titulo_juego = pygame.display.set_caption(self.titulo)
+        self.contador = Contador()
+        # Instancia de Puntaje
+        self.puntaje = Puntaje(self, self.contador)
 
         pantalla_juego = pygame.display.set_mode(DIMENSION)  # Se crea la ventana con las dimensiones especificas
         
@@ -318,13 +321,10 @@ class Puzzle:
         mensaje.dibujar(pantalla_juego)
         pygame.display.update()
 
-        
-        # Instancia de Contador
-        contador = Contador()
-        # Instancia de Puntaje
-        puntaje = Puntaje(self, contador)
+
+
         # instancia de la imagen
-        imagen = Imagen(contador, Verificacion(puntaje))
+        imagen = Imagen(self.contador, Verificacion(self.puntaje))
         # Instancia de Verificacion
         # Instancia de Colision
         colision = Colision(imagen)
@@ -385,27 +385,23 @@ class Puzzle:
                         if event.key == pygame.K_r:
                             self.reiniciarJuego()
                         if event.key == pygame.K_e:
-                            self.salirJuego(puntaje.puntajeFinal)
+                            self.salirJuego(self.puntaje.puntajeFinal)
                             break
                     if event.type == pygame.QUIT:
-                        self.salirJuego(puntaje.puntajeFinal)
+                        self.salirJuego(self.puntaje.puntajeFinal)
                         break
 
-                    
-                    
 
-                    if puntaje.puntajeFinal > 0:
-                        #ctypes.windll.user32.MessageBoxW(0, "TU PUNTAJE OBTENIDO FUE:" + str(puntaje.puntajeFinal)
-                        #                                , "FELICIDADES GANASTE!!", 1)
+
+
+                    if self.puntaje.puntajeFinal > 0:
                         mensaje.cambiarEstado((False,True,False))
                         mensaje.dibujar(pantalla_juego)
                         pygame.display.update()
                         bandera=False
                     
 
-                    elif puntaje.puntajeFinal == -1:
-                        #ctypes.windll.user32.MessageBoxW(0, "TU PUNTAJE OBTENIDO FUE:" + str(puntaje.puntajeFinal)
-                        #                                , "FELICIDADES GANASTE!!", 1)
+                    elif self.puntaje.puntajeFinal == -1:
                         mensaje.cambiarEstado((False,False,True))
                         mensaje.dibujar(pantalla_juego)
                         pygame.display.update()
@@ -417,21 +413,20 @@ class Puzzle:
             except Exception:
                 break
 
- 
+    def getPuntos(self):
+        if self.puntaje.puntajeFinal==-1:
+            puntos=0
+        else:
+            puntos = self.puntaje.puntajeFinal
+            self.puntaje.puntajeFinal=0
+        return puntos
+
+
+
     def reiniciarJuego(self):
         pygame.quit()
         self.iniciarJuego()
 
+
     def salirJuego(self,puntaje):
-        iniciado=False
         pygame.quit()
-        if puntaje==-1:
-            puntaje=0
-        PUNTOS_PATH = obtenerPathAbsoluto('../assets/puntos.dat')
-        with open(PUNTOS_PATH) as f:
-            for lines in f:
-                dato = int(lines.strip())
-        dato += puntaje
-        arch = open(PUNTOS_PATH,'w')
-        arch.write(str(dato))
-        arch.close()

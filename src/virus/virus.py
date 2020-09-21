@@ -23,6 +23,8 @@ class EvitandoVirus():
         self.bandera = True
 
     def iniciarJuego(self):
+        pygame.init()
+        self.bandera = True
         INSTRUCCIONES = True
         FONTO_PATH = obtenerPathAbsoluto('img/Fondo.png')
         OBJETIVO_PATH = obtenerPathAbsoluto('img/cuadroObjetivo.png')
@@ -72,7 +74,8 @@ class EvitandoVirus():
         with open(MENSAJES_PATH) as m:
             for line in m:
                 datos = line.strip().split(',')
-                mensaje = Mensaje(datos[0], datos[1], Posicion(0,0))
+                path = obtenerPathAbsoluto(datos[0])
+                mensaje = Mensaje(path, datos[1], Posicion(0,0))
                 self.mapa.agregarCuadros(mensaje)
 
         self.mapa.dibujar(self.ventana)
@@ -117,14 +120,9 @@ class EvitandoVirus():
     def salirJuego(self):
         self.bandera = False
         pygame.quit()
-        PUNTOS_PATH = obtenerPathAbsoluto('../assets/puntos.dat')
-        with open(PUNTOS_PATH) as f:
-            for lines in f:
-                dato = int(lines.strip())
-        dato += self.puntaje.obtenerPuntos()
-        arch = open(PUNTOS_PATH,'w')
-        arch.write(str(dato))
-        arch.close()
+
+    def getPuntos(self):
+        return self.puntaje.obtenerPuntos()
 
     def verificarCondiciones(self, tipoCuadroSolapado):
         """
@@ -152,3 +150,4 @@ class EvitandoVirus():
 
     def update(self, tipoCuadroSolapado):
         self.verificarCondiciones(tipoCuadroSolapado)
+

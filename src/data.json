@@ -1,0 +1,43 @@
+{
+ "usuarios": [
+  {
+   "nombre": "Mike",
+   "puntuaciones": [
+    1130,
+    1250,
+    1545,
+    360,
+    50000,
+    370,
+    170,
+    250,
+    200,
+    100,
+    70,
+    250,
+    200,
+    100,
+    70
+   ]
+  },
+  {
+   "nombre": "Cesar",
+   "puntuaciones": [
+    0
+   ]
+  },
+  {
+   "nombre": "manaboi",
+   "puntuaciones": [
+    600,
+    2083
+   ]
+  },
+  {
+   "nombre": "Mahatma",
+   "puntuaciones": [
+    740
+   ]
+  }
+ ]
+}

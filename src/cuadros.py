@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from posicion import Posicion
 from listener import *
 from fachadaJuegos import *
-
+from ventanaPuntuacion import *
 pygame.init()
 
 
@@ -111,12 +111,13 @@ class Camino(Cuadro):
         return self.posicion.getPosicion()
 
 class Mensaje(Cuadro):
-    def __init__(self, imagen, nombre):
+    def __init__(self, imagen, nombre, facade, usuario):
         super().__init__(Posicion(175,120))
         self.imagen = pygame.image.load(imagen)
         self.nombre = nombre
         self.aparecer = False
-        self.fachadaJuegos = FachadaJuegos()
+        self.fachadaJuegos = facade
+        self.winPuntuaciones = VentanaPuntuaciones(usuario)
 
     def dibujar(self, ventana):
         if self.aparecer:
@@ -138,27 +139,36 @@ class Mensaje(Cuadro):
         if self.aparecer:
             keys = Listener.detectar()
             juego = None
-            if keys[pygame.K_RETURN] and self.nombre != 'inicio':
+            if keys[pygame.K_RETURN] and self.nombre != 'inicio' and self.nombre != 'tableroPuntaje':
                 self.aparecer = False
                 pygame.quit()
                 self.fachadaJuegos.arrancarJuego(self.nombre)
+            elif keys[pygame.K_RETURN] and self.nombre == 'tableroPuntaje':
+                self.aparecer = False
+                pygame.quit()
+                self.winPuntuaciones.mostrarPuntuaciones()
             elif keys[pygame.K_ESCAPE]:
                 self.aparecer = False
 
 class Marcador(Cuadro):
 
-    def __init__(self, imagen, posicion, puntos):
+    def __init__(self, imagen, posicion, puntos, facade):
         super().__init__(posicion)
         self.imagen = pygame.image.load(imagen)
-        with open(puntos) as p:
-            for line in p:
-                self.puntaje = int(line.strip())
+        self.imagen = pygame.transform.scale(self.imagen, (190,39) )
+        self.fachada = facade
+        self.puntaje = self.fachada.getPuntaje()
 
+    def actualizarMarcador(self):
+        self.puntaje = self.fachada.getPuntaje()
     def dibujar(self, ventana):
         ventana.blit(self.imagen, self.posicion.getPosicion())
-        fuente = pygame.font.SysFont('Arial', 25)
-        texto_puntaje = fuente.render(f'Puntaje: {self.puntaje}', 0, (255, 255, 255))
-        ventana.blit(texto_puntaje, (self.posicion.getPosicion()[0] + 65, self.posicion.getPosicion()[1] + 10))
+        fuente = pygame.font.SysFont('Arial', 16)
+        texto_puntaje = fuente.render(f'Puntos: {self.puntaje}', 0, (255, 255, 255))
+        ventana.blit(texto_puntaje, (self.posicion.getPosicion()[0]+42, self.posicion.getPosicion()[1] + 10))
 
     def mover(self):
         pass
+
+    def getPuntaje(self):
+        return self.puntaje

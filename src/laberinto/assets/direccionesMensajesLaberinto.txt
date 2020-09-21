@@ -1,7 +1,7 @@
-laberinto/img/inicioLaberinto.png,instrucciones
-laberinto/img/GameOver.png,perdida
-laberinto/img/Victoria.png,victoria
-laberinto/img/MensajeEnemigo.png,enemigo
-laberinto/img/MensajeVirus1.png,virus1
-laberinto/img/MensajeVirus2.png,virus2
-laberinto/img/MensajeVirus3.png,virus3
+img/inicioLaberinto.png,instrucciones
+img/GameOver.png,perdida
+img/Victoria.png,victoria
+img/MensajeEnemigo.png,enemigo
+img/MensajeVirus1.png,virus1
+img/MensajeVirus2.png,virus2
+img/MensajeVirus3.png,virus3

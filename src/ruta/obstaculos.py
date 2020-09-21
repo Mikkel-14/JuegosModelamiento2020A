@@ -11,6 +11,7 @@ from ruta.posicionMaya import *
 from random import randint
 from abc import ABC, abstractmethod
 
+pygame.init()
 
 class Obstaculo(ABC):
     @abstractmethod
@@ -24,6 +25,7 @@ class Obstaculo(ABC):
 
 class Virus(Obstaculo):
     def __init__(self):
+        pygame.init()
         self.imagen = pygame.image.load(obtenerPathAbsoluto('img/obs1.png', __file__))
         self.imagen = pygame.transform.scale(self.imagen, settings["tamañoObstaculo"])
         
@@ -45,7 +47,8 @@ class Virus(Obstaculo):
 
 class ArañaGigante(Obstaculo):
     def __init__(self):
-        self.imagen = pygame.image.load(obtenerPathAbsoluto('img/obs2.png', __file__)).convert_alpha()
+        pygame.init()
+        self.imagen = pygame.image.load(obtenerPathAbsoluto('img/obs2.png', __file__))
         self.imagen = pygame.transform.scale(self.imagen, settings["tamañoObstaculo"])
         self.posicion = Posicion((randint(int(settings["limiteMinObstaculoX"]), int(settings["limiteMaxObstaculoX"])), settings["tamañoVentana"][1]))
  
@@ -63,6 +66,7 @@ class ArañaGigante(Obstaculo):
 
 class MailInfectado(Obstaculo):
     def __init__(self):
+        pygame.init()
         self.imagen = pygame.image.load(obtenerPathAbsoluto('img/obs3.png', __file__))
         self.imagen = pygame.transform.scale(self.imagen, settings["tamañoObstaculo"])
         self.posicion = Posicion((randint(int(settings["limiteMinObstaculoX"]), int(settings["limiteMaxObstaculoX"])), settings["tamañoVentana"][1]))
