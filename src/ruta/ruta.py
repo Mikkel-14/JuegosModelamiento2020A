@@ -17,12 +17,13 @@ from ruta.mensaje import *
 from ruta.puntaje import *
 from ruta.boton import *
 
-
+pygame.init()
 
 class Ruta():
     def __init__(self):
+        pygame.init()
         self.mapa = Mapa()
-        self.puntaje = Puntaje       
+        self.puntaje = Puntaje(4, 0)    
 
     def mostrarMensajesIniciales(self):
         self.ventanaRuta = pygame.display.set_mode(settings["tamañoVentana"])
@@ -46,13 +47,29 @@ class Ruta():
         mensajeInstrucciones.mostrar(self.ventanaRuta)
 
     def iniciarJuego(self):
-        self.ventanaRuta = pygame.display.set_mode(settings["tamañoVentana"])
+        
         pygame.init() # carga los modulos de la librería pygame
-
+        self.ventanaRuta = pygame.display.set_mode(settings["tamañoVentana"])
         pygame.mouse.set_cursor(*pygame.cursors.tri_left) # cambia la apariencia del cursor por el diseño "tri_left"
 
-        self.mostrarMensajesIniciales()
+        # creación de botones
+        botonJugar = Boton('JUGAR', Posicion(settings["coordenadaBotonJugar"]))
+        botonAtras = Boton('VOLVER_AL_MUSEO', Posicion(settings["coordenadaBotonAtras"]))
+        botonOk = Boton('OK', Posicion(settings["coordenadaBotonOk"]))
 
+        # creación de mensajes con sus botones respectivos
+        mensajeBienvenida = Mensaje('img/fondoBienvenida.png', Posicion((0, 0)))
+        mensajeBienvenida.agregarBoton(botonJugar)
+        mensajeBienvenida.agregarBoton(botonAtras)
+
+        mensajeInstrucciones = Mensaje('img/fondoInstrucciones.png', Posicion((0, 0)))
+        mensajeInstrucciones.agregarBoton(botonOk)
+        mensajeBienvenida.mostrar(self.ventanaRuta)
+    
+        if(mensajeBienvenida.visibilidad == False and mensajeBienvenida._flag):
+
+            mensajeInstrucciones.mostrar(self.ventanaRuta)
+    
         rutamayainiciado = True 
 
         # Creación de mensajes y botones correspondientes para el GAME OVER y el Fin del juego
@@ -66,7 +83,7 @@ class Ruta():
         mensajeGanaste.agregarBoton(btnVolverAtras)
         mensajeGanaste.agregarBoton(btnVolverJugar)
         
-        puntaje = Puntaje(4, 0)
+        self.puntaje = Puntaje(4, 0)
         
         pregunta1 = AudioPregunta('sounds/pregunta1.wav', "C")
         pregunta2 = AudioPregunta('sounds/pregunta2.wav', "B")
@@ -80,7 +97,7 @@ class Ruta():
         preguntas.añadirAudioPregunta(pregunta3)
         preguntas.añadirAudioPregunta(pregunta4)
 
-        verificacion = Verificacion(preguntas, self.mapa, puntaje)
+        verificacion = Verificacion(preguntas, self.mapa, self.puntaje)
         camino = Camino('img/fondoCamino22.png', Posicion(settings["coordenadaCamino"]), preguntas)
 
         solapamientoOpcionA = SolapamientoConOpcion(verificacion)
@@ -106,27 +123,29 @@ class Ruta():
         self.mapa.agregarFigura(camino)
 
         solapamientoConObstaculo = SolapamientoConObstaculo(self.mapa)
-
-        self.mapa.agregarFigura(FiguraVida(Posicion(settings["coordenadaFigVida"])))
-        self.mapa.agregarFigura(Marcador('img/marcador.png', Posicion(settings["coordenadaMarcador"]), puntaje))
+        figuraVida = FiguraVida(Posicion(settings["coordenadaFigVida"]))
+        self.reiniciarJuego(figuraVida, camino, verificacion)
+        mensajeGameOver._flag = True
+        self.mapa.agregarFigura(figuraVida)
+        self.mapa.agregarFigura(Marcador('img/marcador.png', Posicion(settings["coordenadaMarcador"]), self.puntaje))
         self.mapa.agregarFigura(opcionA)
         self.mapa.agregarFigura(opcionB)
         self.mapa.agregarFigura(opcionC)
         self.mapa.agregarFigura(Personaje('img/personaje.png', Posicion(settings["coordenadaPersonaje"]), solapamientosConOpcion, solapamientoConObstaculo))
 
         while rutamayainiciado: 
-          
             self.verificarCondiciones(mensajeGameOver, mensajeGanaste, verificacion)
-            self.mapa.dibujar(self.ventanaRuta)
+            if(mensajeGameOver._flag):
+                self.mapa.dibujar(self.ventanaRuta)
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    rutamayainiciado = False
-                    pygame.quit()
-            pygame.display.update()
-           
-
-
+                for event in pygame.event.get():
+                    pass
+                    
+            if (mensajeGameOver._flag == True):
+                pygame.display.update()
+            else:
+                break
+ 
     def verificarCondiciones(self, mensajeGameOver, mensajeGanaste, verificacion):
         if self.mapa.obtenerVidasActuales() >= 1:
             self.mapa.mover(self.ventanaRuta)
@@ -134,9 +153,11 @@ class Ruta():
                 pygame.mouse.set_visible(True)
                 self.reiniciarJuego(self.mapa.obtenerFiguraVida(), self.mapa.obtenerCamino(), verificacion)
                 mensajeGanaste.mostrar(self.ventanaRuta)
+                mensajeGameOver._flag = True
         else: 
             pygame.mouse.set_visible(True)
             self.reiniciarJuego(self.mapa.obtenerFiguraVida(), self.mapa.obtenerCamino(), verificacion)
+            mensajeGameOver._flag = True
             mensajeGameOver.mostrar(self.ventanaRuta)
 
     def reiniciarJuego(self, figuraVida, camino, verificacion):
@@ -144,3 +165,6 @@ class Ruta():
         camino.reiniciarIteradores()
         verificacion.reiniciarNumeroPreguntasContestadas()
         verificacion._i = 0
+
+    def getPuntos(self):
+        return self.puntaje.getPuntos()

@@ -3,7 +3,6 @@ import pygame
 from .Control_Movimiento import *
 from .Mensaje import *
 from .Marcador import *
-from herramientas import *
 
 class Snake(object):
 
@@ -44,7 +43,7 @@ class Snake(object):
         mensaje.dibujar(pantalla)
         pygame.display.update()
         Control_Movimiento.esperarTeclaEnter()
-
+        self.marcador.reiniciar()
         while bandera and self.marcador.obtenerVidas()>=0:
             clock.tick(self.velocidad)
             run = [False,False,False,False]
@@ -52,15 +51,8 @@ class Snake(object):
                 clock.tick(self.velocidad)
                 for event in pygame.event.get():
                         if event.type == pygame.QUIT:
-                            pathAbsoluto = obtenerPathAbsoluto('assets/puntos.dat')
-                            with open (pathAbsoluto) as f:
-                                for lines in f:
-                                    dato = int(lines.strip())
-                            dato += self.marcador.puntuacion
-                            arch = open(pathAbsoluto,'w')
-                            arch.write(str(dato))
-                            arch.close()
-                            exit()
+                            pygame.QUIT
+                            return True
                 mapa.cabeza.mover(limiteVentanaX,limiteVentanaY)
                 mapa.cabeza2.mover(limiteVentanaX,limiteVentanaY)
 
@@ -101,26 +93,11 @@ class Snake(object):
             while True:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
-                        pathAbsoluto = obtenerPathAbsoluto('assets/puntos.dat')
-                        with open (pathAbsoluto) as f:
-                            for lines in f:
-                                dato = int(lines.strip())
-                        dato += self.marcador.puntuacion
-                        arch = open(pathAbsoluto,'w')
-                        arch.write(str(dato))
-                        arch.close()
-                        exit()
+                        pygame.QUIT
+                        return True
                 keys = Control_Movimiento.detectarMovimiento()
                 if keys[pygame.K_ESCAPE]:
                     bandera=False
-                    pathAbsoluto = obtenerPathAbsoluto('assets/puntos.dat')
-                    with open (pathAbsoluto) as f:
-                        for lines in f:
-                            dato = int(lines.strip())
-                    dato += self.marcador.puntuacion
-                    arch = open(pathAbsoluto,'w')
-                    arch.write(str(dato))
-                    arch.close()
                     break
                 elif keys[pygame.K_SPACE] and self.marcador.obtenerVidas()>=0:
                     break
@@ -148,3 +125,5 @@ class Snake(object):
         for i in range(tam):
             cola2.quitarUltimo()
 
+    def getPuntos(self):
+         return self.marcador.obtenerPuntuacion()

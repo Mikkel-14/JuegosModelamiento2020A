@@ -1,4 +1,4 @@
-from laberinto.observadorLaberinto import *
+from .observadorLaberinto import *
 import laberinto.settingsLaberinto as s
 
 class PuntuacionLaberinto(ObservadorLaberinto):
@@ -12,3 +12,6 @@ class PuntuacionLaberinto(ObservadorLaberinto):
 
     def calcularPuntos(self):
         self.puntos = int(s.puntosTOTALES - (self.numeroErrores * s.puntosTOTALES / s.maximo_de_vidas))
+
+    def obtenerPuntos(self):
+        return self.puntos

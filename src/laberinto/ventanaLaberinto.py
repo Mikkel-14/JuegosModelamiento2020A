@@ -1,23 +1,24 @@
 import pygame
 import laberinto.settingsLaberinto as s
-from laberinto.cuadrosLaberinto import *
-from laberinto.solapamientoLaberinto import *
-from laberinto.puntuacionLaberinto import *
-from herramientas import *
+from .cuadrosLaberinto import *
+from .posicionLaberinto import *
+from .solapamientoLaberinto import *
+from .puntuacionLaberinto import *
+from .herramientas import *
 pygame.init()
 s.init()
 
-CAMINOLAB_PATH = obtenerPathAbsoluto('laberinto/assets/CaminoLaberinto1.txt')
-POSICION_VIRUS_PATH = obtenerPathAbsoluto('laberinto/assets/VirusLaberinto1.txt')
-FONDO_PATH = obtenerPathAbsoluto('laberinto/img/Fondo_Laberinto.png')
-PISO_PATH = obtenerPathAbsoluto('laberinto/img/Piso_Laberinto.png')
-VIRUS_PATH = obtenerPathAbsoluto('laberinto/img/Virus.png')
-META_PATH = obtenerPathAbsoluto('laberinto/img/Meta.png')
-PERSONAJE_PATH = obtenerPathAbsoluto('laberinto/img/niña.png')
-ENEMIGO_PATH = obtenerPathAbsoluto('laberinto/img/enemigo.png')
-MENSAJES_PATH = obtenerPathAbsoluto('laberinto/assets/direccionesMensajesLaberinto.txt')
-CORAZON_PATH = obtenerPathAbsoluto('laberinto/img/vida1.png')
-CORAZON_VACIO_PATH = obtenerPathAbsoluto('laberinto/img/vida0.png')
+CAMINOLAB_PATH = obtenerPathAbsoluto('assets/CaminoLaberinto1.txt')
+POSICION_VIRUS_PATH = obtenerPathAbsoluto('assets/VirusLaberinto1.txt')
+FONDO_PATH = obtenerPathAbsoluto('img/Fondo_Laberinto.png')
+PISO_PATH = obtenerPathAbsoluto('img/Piso_Laberinto.png')
+VIRUS_PATH = obtenerPathAbsoluto('img/Virus.png')
+META_PATH = obtenerPathAbsoluto('img/Meta.png')
+PERSONAJE_PATH = obtenerPathAbsoluto('img/niña.png')
+ENEMIGO_PATH = obtenerPathAbsoluto('img/enemigo.png')
+MENSAJES_PATH = obtenerPathAbsoluto('assets/direccionesMensajesLaberinto.txt')
+CORAZON_PATH = obtenerPathAbsoluto('img/vida1.png')
+CORAZON_VACIO_PATH = obtenerPathAbsoluto('img/vida0.png')
 
 
 class VentanaLaberinto:
@@ -34,7 +35,7 @@ class VentanaLaberinto:
     def cargarTablero(self):
         self.tablero = TableroLaberinto()
         self.solapamiento = SolapamientoLaberinto(self.tablero)
-
+        
         self.tablero.agregarCuadros(FondoLaberinto(FONDO_PATH, PosicionLaberinto(0, 0)))
 
         with open(CAMINOLAB_PATH) as f:
@@ -73,7 +74,7 @@ class VentanaLaberinto:
         with open(MENSAJES_PATH) as f:
             for line in f:
                 textos = line.strip().split(',')
-                mensaje = MensajeLaberinto(textos[0], textos[1])
+                mensaje = MensajeLaberinto(obtenerPathAbsoluto(textos[0]), textos[1])
                 self.tablero.agregarCuadros(mensaje)
                 self.solapamiento.registrarObservador(mensaje)
 

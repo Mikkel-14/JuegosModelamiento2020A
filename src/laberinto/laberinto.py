@@ -1,14 +1,14 @@
 import pygame
 import laberinto.settingsLaberinto as s
-from laberinto.ventanaLaberinto import *
-from laberinto.cuadrosLaberinto import *
+from .ventanaLaberinto import *
+from .cuadrosLaberinto import *
+from .herramientas import *
 pygame.init()
 s.init()
 import os
 import sys
 
 bandera = True
-PUNTOS_PATH = obtenerPathAbsoluto('assets/puntos.dat')
 
 class Laberinto():
     def __init__(self):
@@ -17,6 +17,7 @@ class Laberinto():
     def iniciarJuego(self):
         self.ventana = VentanaLaberinto()
         self.ventana.cargarTablero()
+        
         bandera = True
 
         while bandera:
@@ -48,10 +49,7 @@ class Laberinto():
     def salirJuego(self):
         bandera = False
         pygame.quit()
-        with open(PUNTOS_PATH) as f:
-            for lines in f:
-                dato = int(lines.strip())
-        dato += self.ventana.puntuacion.puntos
-        arch = open(PUNTOS_PATH,'w')
-        arch.write(str(dato))
-        arch.close()
+
+    def getPuntos(self):
+        puntos = self.ventana.puntuacion.obtenerPuntos()
+        return puntos
