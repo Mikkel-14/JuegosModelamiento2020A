@@ -15,6 +15,9 @@ El repositorio tendrá (provisionalmente) las siguientes ramas:
 
   `pip3 install pygame`
 
+- Tener instalada la librería PyQt5 
+   `pip3 install PyQt5`
+
 ## Instalación
 
 Puede descargar este repositorio con el siguiente comando:
